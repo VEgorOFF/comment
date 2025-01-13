@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+}
+
+body {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+/* HEADER */
+
+header {
+  width: 100%;
+  height: 53px;
+  background-color: #131313;
+}
+
+footer {
+  display: none;
+}
+
+.menu {
+  display: none;
+}
