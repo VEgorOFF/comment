@@ -5,14 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Yeseva+One&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style\style.css" />
-
-    <!-- <link
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Yeseva+One&display=swap"
       rel="stylesheet"
-      media="screen and (max-width: 1300px)"
+    />
+    <link
+      rel="stylesheet"
+      media="screen and (min-width: 321px)"
+      href="style\style.css"
+    />
+
+    <link
+      rel="stylesheet"
+      media="screen and (max-width: 320px)"
       href="style\styleMobile.css"
-    /> -->
+    />
     <title>Comment</title>
   </head>
 
@@ -41,18 +48,20 @@
               <p>Комментарии</p>
               <p>(80)</p>
             </div>
-            <div>
+            <div class="sort_count">
               <p>По количеству оценок</p>
               <img src="images\Arrow 1.svg" alt="strela" />
             </div>
-            <div>
+            <div class="favorites">
               <p>Избранное</p>
               <img src="images\Group 1171274238.svg" alt="hard" />
             </div>
           </div>
 
           <div class="comment_author">
-            <div class="avatar_author"><img src="images\author1.png" alt="author1" /></div>
+            <div class="avatar_author">
+              <img src="images\author1.png" alt="author1" />
+            </div>
             <div class="author_and_message">
               <div class="text_on_message">
                 <div class="name_author"><p>Максим Авдеенко</p></div>
@@ -60,15 +69,24 @@
               </div>
               <form id="send_comment">
                 <label>
-                  <input class="message" type="text" placeholder="Введите текст..." maxlength="1000" />
+                  <input
+                    class="message"
+                    type="text"
+                    placeholder="Введите текст..."
+                    maxlength="1000"
+                  />
                 </label>
               </form>
             </div>
-            <button class="send" type="submit" form="send_comment" disabled>Отправить</button>
+            <button class="send" type="submit" form="send_comment" disabled>
+              Отправить
+            </button>
           </div>
 
           <div class="comment_people">
-            <div class="avatar_author"><img src="images\author2.png" alt="author2" /></div>
+            <div class="avatar_author">
+              <img src="images\author2.png" alt="author2" />
+            </div>
             <div class="author_and_message">
               <div class="author_and_text">
                 <div class="name_author"><p>Алексей_1994b</p></div>
@@ -76,8 +94,14 @@
               </div>
               <div class="comment_text">
                 <p>
-                  Самое обидное когда сценарий по сути есть - в виде книг, где нет сюжетных дыр, всё логично, стройное повествование и достаточно взять и экранизировать оригинал как это было в первых фильмах с минимальным количеством отсебятины и зритель с восторгом примет любой такой фильм и
-                  сериал, однако вместо этого 'Кольца власти' просто позаимствовали имена из оригинала, куски истории, мало связанные между собой и выдали очередной среднячковый сериал на один раз в лучшем случае.
+                  Самое обидное когда сценарий по сути есть - в виде книг, где
+                  нет сюжетных дыр, всё логично, стройное повествование и
+                  достаточно взять и экранизировать оригинал как это было в
+                  первых фильмах с минимальным количеством отсебятины и зритель
+                  с восторгом примет любой такой фильм и сериал, однако вместо
+                  этого 'Кольца власти' просто позаимствовали имена из
+                  оригинала, куски истории, мало связанные между собой и выдали
+                  очередной среднячковый сериал на один раз в лучшем случае.
                 </p>
               </div>
               <div class="under_text">
@@ -99,7 +123,9 @@
           </div>
 
           <div class="answer">
-            <div class="avatar_author"><img src="images\author3.png" alt="author3" /></div>
+            <div class="avatar_author">
+              <img src="images\author3.png" alt="author3" />
+            </div>
             <div class="author_and_message">
               <div class="author_and_text">
                 <div class="name_author"><p>Джунбокс3000</p></div>
@@ -110,8 +136,14 @@
               </div>
               <div class="comment_text">
                 <p>
-                  Самое обидное когда сценарий по сути есть - в виде книг, где нет сюжетных дыр, всё логично, стройное повествование и достаточно взять и экранизировать оригинал как это было в первых фильмах с минимальным количеством отсебятины и зритель с восторгом примет любой такой фильм и
-                  сериал, однако вместо этого 'Кольца власти' просто позаимствовали имена из оригинала, куски истории, мало связанные между собой и выдали очередной среднячковый сериал на один раз в лучшем случае.
+                  Самое обидное когда сценарий по сути есть - в виде книг, где
+                  нет сюжетных дыр, всё логично, стройное повествование и
+                  достаточно взять и экранизировать оригинал как это было в
+                  первых фильмах с минимальным количеством отсебятины и зритель
+                  с восторгом примет любой такой фильм и сериал, однако вместо
+                  этого 'Кольца власти' просто позаимствовали имена из
+                  оригинала, куски истории, мало связанные между собой и выдали
+                  очередной среднячковый сериал на один раз в лучшем случае.
                 </p>
               </div>
               <div class="under_text">
