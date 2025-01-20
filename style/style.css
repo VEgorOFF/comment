@@ -316,9 +316,21 @@ main {
 }
 
 .author_and_message {
-  display: flex;
-  flex-direction: column;
-  gap: 13px;
+  /* display: flex;
+  flex-direction: column; */
+  display: grid;
+
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: 0.1fr 1fr;
+  /* gap: 13px; */
+}
+
+.avatar_author {
+  grid-row-start: 1;
+  grid-column-start: 1;
+
+  grid-row-end: 2;
+  grid-column-end: 2;
 }
 
 .comment_people {
@@ -329,16 +341,34 @@ main {
 }
 
 .author_and_text {
-  display: flex;
+  /* display: flex;
   flex-flow: row nowrap;
   gap: 15px;
-  align-items: center;
+  align-items: center; */
+  grid-row-start: 1;
+  grid-column-start: 2;
+
+  grid-row-end: 2;
+  grid-column-end: 3;
+}
+
+.comment_text {
+  grid-row-start: 2;
+  grid-column-start: 2;
+
+  grid-row-end: 3;
+  grid-column-end: 3;
 }
 
 .under_text {
-  display: flex;
+  /* display: flex;
   flex-flow: row nowrap;
-  gap: 30px;
+  gap: 30px; */
+  grid-row-start: 3;
+  grid-column-start: 2;
+
+  grid-row-end: 4;
+  grid-column-end: 3;
 }
 
 .under_text div {

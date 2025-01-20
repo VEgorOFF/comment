@@ -184,9 +184,35 @@ main {
 }
 
 .comment_author {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  display: grid;
+
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: 0.5fr 1.5fr;
+  gap: 15px 0px;
+}
+
+.avatar_author {
+  grid-row-start: 1;
+  grid-column-start: 1;
+
+  grid-row-end: 2;
+  grid-column-end: 2;
+}
+
+.form_send {
+  grid-row-start: 2;
+  grid-column-start: 1;
+
+  grid-row-end: 3;
+  grid-column-end: 3;
+}
+
+.send {
+  grid-row-start: 3;
+  grid-column-start: 1;
+
+  grid-row-end: 4;
+  grid-column-end: 3;
 }
 
 .comment_author img,
@@ -196,8 +222,14 @@ main {
 }
 
 .text_on_message {
-  display: flex;
-  flex-direction: column;
+  /* display: flex;
+  flex-direction: column; */
+  grid-row-start: 1;
+  grid-column-start: 2;
+
+  grid-row-end: 2;
+  grid-column-end: 3;
+  align-content: end;
 }
 
 .message {
@@ -228,7 +260,6 @@ main {
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
   color: #122ac0;
-  justify-items: center;
 }
 
 .max_text {
