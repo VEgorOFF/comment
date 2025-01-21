@@ -379,6 +379,11 @@ main {
   opacity: 0.4;
 }
 
+.under_text div:last-child p {
+  color: #8ac540;
+  opacity: 1;
+}
+
 .under_text button {
   width: 20px;
   height: 20px;

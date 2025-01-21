@@ -345,6 +345,7 @@ main {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
+  align-items: center;
 }
 
 .date_and_time {
@@ -356,4 +357,78 @@ main {
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
   opacity: 0.4;
+}
+
+.comment_text p {
+  font-family: Inter;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19.36px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.under_text div {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.under_text div:last-child {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  gap: 0px;
+}
+
+.under_text div:last-child p {
+  color: #8ac540;
+  opacity: 1;
+}
+
+.under_text p {
+  font-family: Inter;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19.36px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  opacity: 0.4;
+}
+
+.under_text button {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  font-family: Inter;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 21.78px;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.under_text button:hover {
+  background-color: #000000;
+  opacity: 0.4;
+  cursor: pointer;
+}
+
+.under_text button:first-child {
+  color: #ff0000;
+}
+
+.under_text button:last-child {
+  color: #8ac540;
+}
+
+.under_text div:hover {
+  cursor: pointer;
 }
