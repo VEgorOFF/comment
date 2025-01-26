@@ -38,8 +38,28 @@
               <p>(80)</p>
             </div>
             <div class="sort_count">
-              <p>По количеству оценок</p>
-              <img src="images\Arrow 1.svg" alt="strela" />
+              <div class="sort_name">
+                <p>По количеству оценок</p>
+                <img src="images\Arrow 1.svg" alt="strela" />
+              </div>
+              <div class="sort_btn">
+                <div id="date">
+                  <img src="images\check.png" alt="check" />
+                  <p>По дате</p>
+                </div>
+                <div id="count_likes">
+                  <img src="images\check.png" alt="check" />
+                  <p>По количеству оценок</p>
+                </div>
+                <div id="actual">
+                  <img src="images\check.png" alt="check" />
+                  <p>По актуальности</p>
+                </div>
+                <div id="count_answers">
+                  <img src="images\check.png" alt="check" />
+                  <p>По количеству ответов</p>
+                </div>
+              </div>
             </div>
             <div class="favorites">
               <p>Избранное</p>
@@ -47,11 +67,10 @@
             </div>
           </div>
 
-          <div class="comment_author">
+          <div class="comment_author blockFetch">
             <div class="avatar_author">
-              <img src="images\author1.png" alt="author1" />
+              <!-- <img src="images\author1.png" alt="author1" /> -->
             </div>
-            <!-- <div class="author_and_message"> -->
             <div class="text_on_message">
               <div class="name_author"><p>Максим Авдеенко</p></div>
               <div class="max_text"><p>Макс. 1000 символов</p></div>
@@ -66,10 +85,10 @@
             <button class="send" type="submit" form="send_comment" disabled>Отправить</button>
           </div>
 
-          <div class="comment_people">
+          <div class="comment_people blockFetch">
             <div class="author_and_message">
               <div class="avatar_author">
-                <img src="images\author2.png" alt="author2" />
+                <!-- <img src="images\author2.png" alt="author2" /> -->
               </div>
               <div class="author_and_text">
                 <div class="name_author"><p>Алексей_1994b</p></div>
@@ -99,16 +118,17 @@
             </div>
           </div>
 
-          <div class="answer">
+          <div class="answer blockFetch">
             <div class="author_and_message">
               <div class="avatar_author">
-                <img src="images\author3.png" alt="author3" />
+                <!-- <img src="images\author3.png" alt="author3" /> -->
               </div>
-              <div class="author_and_text">
+              <div class="author_and_text author_and_text_answer">
                 <div class="name_author"><p>Джунбокс3000</p></div>
-
-                <img src="images\otvet.svg" alt="otvet" />
-                <div class="name_author previously"><p>Алексей_1994b</p></div>
+                <div class="img_and_author">
+                  <img src="images\otvet.svg" alt="otvet" />
+                  <div class="name_author previously"><p>Алексей_1994b</p></div>
+                </div>
                 <div class="date_and_time"><p>15.01 15:18</p></div>
               </div>
               <div class="comment_text">
@@ -117,7 +137,7 @@
                   сериал, однако вместо этого 'Кольца власти' просто позаимствовали имена из оригинала, куски истории, мало связанные между собой и выдали очередной среднячковый сериал на один раз в лучшем случае.
                 </p>
               </div>
-              <div class="under_text">
+              <div class="under_text under_text_answer">
                 <div>
                   <img src="images\izbran.svg" alt="izbran" />
                   <p>В избранное</p>
@@ -135,5 +155,7 @@
     </main>
 
     <footer></footer>
+
+    <script src="script.js"></script>
   </body>
 </html>

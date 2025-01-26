@@ -215,9 +215,11 @@ main {
   grid-column-end: 3;
 }
 
-.comment_author img,
-.comment_people img,
-.answer img {
+.comment_author .avatar_author img,
+.comment_people .avatar_author img,
+.answer .avatar_author img {
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
 }
 
@@ -431,4 +433,60 @@ main {
 
 .under_text div:hover {
   cursor: pointer;
+}
+
+.author_and_text_answer {
+  display: grid;
+  grid-template-rows: 3fr 1fr;
+  grid-template-columns: 1fr 1fr;
+}
+
+.name_author {
+  grid-row-start: 1;
+  grid-column-start: 1;
+
+  grid-row-end: 2;
+  grid-column-end: 2;
+}
+
+.img_and_author {
+  grid-row-start: 2;
+  grid-column-start: 1;
+
+  grid-row-end: 3;
+  grid-column-end: 3;
+
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 13px;
+}
+
+.date_and_time {
+  grid-row-start: 1;
+  grid-column-start: 2;
+
+  grid-row-end: 2;
+  grid-column-end: 3;
+  justify-items: end;
+}
+
+.previously {
+  font-family: Inter;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 21.78px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: #000000;
+  opacity: 0.4;
+}
+
+.comment_people {
+  margin-bottom: 11px;
+}
+
+.under_text_answer {
+  justify-content: left;
+  gap: 16px;
 }
