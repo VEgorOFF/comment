@@ -38,9 +38,9 @@ function getApi() {
 getApi();
 
 function commentsCount() {
-  let blockFetch = document.querySelectorAll(".blockFetch");
+  let commentPeople = document.querySelectorAll(".comment_people");
   let divCount = document.querySelector(".first p:last-child");
-  divCount.innerHTML = `(${blockFetch.length})`;
+  divCount.innerHTML = `(${commentPeople.length})`;
 }
 
 commentsCount();
@@ -69,6 +69,7 @@ function sortCount() {
       "sortName",
       sortCountLikes.querySelector("p").textContent
     );
+    sortComments();
   });
 
   sortActual.addEventListener("click", function () {
@@ -86,3 +87,20 @@ function sortCount() {
 }
 
 sortCount();
+
+function sortComments() {
+  let allComments = document.querySelector(".allcomments");
+  let arrAllComments = Array.from(allComments.children);
+  let sortArrAllComments = arrAllComments.sort(
+    (a, b) =>
+      a.querySelector(".number_likes").textContent -
+      b.querySelector(".number_likes").textContent
+  );
+
+  sortArrAllComments.forEach((el) =>
+    document.querySelector(".allcomments").appendChild(el)
+  );
+
+  // let countLikes = document.querySelectorAll(".number_likes");
+  console.log(sortArrAllComments);
+}

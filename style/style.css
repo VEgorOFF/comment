@@ -311,9 +311,9 @@ main {
 
 .comment_people {
   display: flex;
-  flex-flow: row nowrap;
+  flex-direction: column;
   margin-top: 40px;
-  gap: 30px;
+  /* gap: 30px; */
 }
 
 .author_and_text {
@@ -453,6 +453,7 @@ main {
   display: flex;
   flex-flow: row nowrap;
   align-items: baseline;
+  min-width: 202px;
 }
 
 .sort_count:hover {

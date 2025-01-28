@@ -107,7 +107,8 @@ main {
   grid-column-end: 3;
 }
 
-.title_comments div {
+.title_comments .first,
+.title_comments .favorites {
   display: flex;
   flex-flow: row nowrap;
   /* gap: 13px; */
@@ -489,4 +490,63 @@ main {
 .under_text_answer {
   justify-content: left;
   gap: 16px;
+}
+
+/* сортировка */
+
+.sort_btn {
+  display: none;
+}
+
+.sort_count .sort_name {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: baseline;
+}
+
+.sort_count:hover {
+  cursor: pointer;
+}
+
+.sort_count:hover .sort_btn {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  position: absolute;
+  z-index: 1;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 10px 0px #0000001a;
+  padding-left: 8px;
+  padding-right: 22px;
+  padding-top: 9px;
+  padding-bottom: 9px;
+  margin-top: 30px;
+}
+
+.sort_btn p {
+  font-family: Inter;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19.36px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+
+  text-decoration: none;
+  color: #000000;
+  opacity: 0.4;
+}
+
+.sort_btn div {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 7px;
+}
+
+.sort_btn div img {
+  opacity: 0;
+}
+
+.sort_btn div:hover img {
+  opacity: 1;
 }
