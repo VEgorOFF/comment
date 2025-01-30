@@ -231,17 +231,32 @@ main {
 
 .message {
   width: 658px;
-  height: 61px;
+  /* min-height: 61px; */
   border-radius: 5px 5px 5px 5px;
-  opacity: 0px;
+  opacity: 1;
   background: #ffffff;
   box-shadow: 0px 0px 10px 0px #00000033;
   padding-left: 30px;
+  padding-right: 19px;
+  padding-top: 20px;
+  /* padding-bottom: 20px; */
   border: none;
+  resize: none;
 }
 
+.message::placeholder {
+  /* color: red; */
+}
+
+/* .message {
+  resize: none;
+  &.auto {
+      overflow-y: hidden;
+  }
+} */
+
 .send {
-  align-self: flex-end;
+  /* align-self: flex-end; */
   width: 213px;
   height: 61px;
   border-radius: 5px 5px 5px 5px;
@@ -282,7 +297,7 @@ main {
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
-  opacity: 0.4;
+  /* opacity: 0.4; */
 }
 
 .send {
@@ -500,4 +515,24 @@ main {
 
 .sort_btn div:hover img {
   opacity: 1;
+}
+
+/* hover send button */
+.hover-style:hover {
+  cursor: pointer;
+}
+
+.warning_text {
+  display: none;
+}
+
+.warning_text p {
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16.94px;
+  text-align: right;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: #ff0000;
 }

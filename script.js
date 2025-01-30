@@ -2,19 +2,11 @@ function getApi() {
   let blockFetch = document.querySelectorAll(".blockFetch");
 
   for (let i = 0; i < blockFetch.length; i++) {
-    if (
-      localStorage.getItem(`firstName[${i}]`) !== null &&
-      localStorage.getItem(`lastName[${i}]`) !== null &&
-      localStorage.getItem(`picture[${i}]`) !== null
-    ) {
+    if (localStorage.getItem(`firstName[${i}]`) !== null && localStorage.getItem(`lastName[${i}]`) !== null && localStorage.getItem(`picture[${i}]`) !== null) {
       let divFirstName = blockFetch[i].querySelector(".name_author");
       let divPhoto = blockFetch[i].querySelector(".avatar_author");
-      divFirstName.innerHTML = `${localStorage.getItem(
-        `firstName[${i}]`
-      )} ${localStorage.getItem(`lastName[${i}]`)}`;
-      divPhoto.innerHTML = `<img src="${localStorage.getItem(
-        `picture[${i}]`
-      )}">`;
+      divFirstName.innerHTML = `${localStorage.getItem(`firstName[${i}]`)} ${localStorage.getItem(`lastName[${i}]`)}`;
+      divPhoto.innerHTML = `<img src="${localStorage.getItem(`picture[${i}]`)}">`;
     } else {
       fetch("https://randomuser.me/api/")
         .then((res) => res.json())
@@ -65,10 +57,7 @@ function sortCount() {
 
   sortCountLikes.addEventListener("click", function () {
     sortName.innerHTML = sortCountLikes.querySelector("p").textContent;
-    localStorage.setItem(
-      "sortName",
-      sortCountLikes.querySelector("p").textContent
-    );
+    localStorage.setItem("sortName", sortCountLikes.querySelector("p").textContent);
     sortComments();
   });
 
@@ -79,10 +68,7 @@ function sortCount() {
 
   sortCountAnswers.addEventListener("click", function () {
     sortName.innerHTML = sortCountAnswers.querySelector("p").textContent;
-    localStorage.setItem(
-      "sortName",
-      sortCountAnswers.querySelector("p").textContent
-    );
+    localStorage.setItem("sortName", sortCountAnswers.querySelector("p").textContent);
   });
 }
 
@@ -91,15 +77,9 @@ sortCount();
 function sortComments() {
   let allComments = document.querySelector(".allcomments");
   let arrAllComments = Array.from(allComments.children);
-  let sortArrAllComments = arrAllComments.sort(
-    (a, b) =>
-      b.querySelector(".number_likes").textContent -
-      a.querySelector(".number_likes").textContent
-  );
+  let sortArrAllComments = arrAllComments.sort((a, b) => b.querySelector(".number_likes").textContent - a.querySelector(".number_likes").textContent);
 
-  sortArrAllComments.forEach((el) =>
-    document.querySelector(".allcomments").appendChild(el)
-  );
+  sortArrAllComments.forEach((el) => document.querySelector(".allcomments").appendChild(el));
 
   // let countLikes = document.querySelectorAll(".number_likes");
   console.log(sortArrAllComments);
@@ -109,22 +89,41 @@ function sendComment() {
   let buttonSend = document.querySelector(".send");
   let textArea = document.querySelector(".message");
   let maxText = document.querySelector(".max_text");
+  let warningText = document.querySelector(".warning_text");
+
+  // textArea.forEach((el) => {
+  //   el.style.height = el.setAttribute("style", "height: " + el.scrollHeight + "px");
+  //   el.classList.add("auto");
+  //   el.addEventListener("input", (e) => {
+  //     el.style.height = "auto";
+  //     el.style.height = el.scrollHeight + "px";
+  //   });
+  // });
+  textArea.addEventListener("input", function () {
+    textArea.style.height = "5px";
+    textArea.style.height = `${textArea.scrollHeight}px`;
+    console.log(textArea.scrollHeight);
+  });
 
   textArea.addEventListener("input", function (event) {
     if (event.target.value.length === 0) {
       buttonSend.setAttribute("disabled", "");
       buttonSend.style.background = "#a1a1a1";
+      buttonSend.classList.remove("hover-style");
     } else {
       buttonSend.removeAttribute("disabled");
       buttonSend.style.background = "#ABD873";
+      buttonSend.classList.add("hover-style");
     }
 
     if (event.target.value.length > 0) {
       maxText.innerHTML = `${event.target.value.length}/1000`;
       if (event.target.value.length > 1000) {
         maxText.setAttribute("style", "color:red; opacity: 1;");
+        warningText.style.display = "flex";
       } else {
         maxText.setAttribute("style", "color:black; opacity: 0.4;");
+        warningText.style.display = "none";
       }
     } else {
       maxText.innerHTML = "Макс. 1000 символов";
