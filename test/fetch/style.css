@@ -1,0 +1,18 @@
+.sort_btn {
+  display: none;
+}
+
+.sort_count div:first-child {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: baseline;
+}
+
+.sort_count:hover {
+  cursor: pointer;
+}
+
+.sort_count:hover .sort_btn {
+  display: flex;
+  flex-direction: column;
+}
