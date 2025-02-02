@@ -68,11 +68,9 @@
           </div>
 
           <div class="comment_author blockFetch">
-            <div class="avatar_author">
-              <!-- <img src="images\author1.png" alt="author1" /> -->
-            </div>
+            <div id="avatar" class="avatar_author"></div>
             <div class="text_on_message">
-              <div class="name_author"><p>Максим Авдеенко</p></div>
+              <div id="name" class="name_author"><p>Максим Авдеенко</p></div>
               <div class="max_text"><p>Макс. 1000 символов</p></div>
             </div>
             <div class="warning_text"><p>Слишком длинное сообщение</p></div>
@@ -83,7 +81,7 @@
                 </label>
               </form>
             </div>
-            <button class="send" type="submit" form="send_comment" disabled>Отправить</button>
+            <button class="send" type="button" form="send_comment" disabled>Отправить</button>
           </div>
 
           <div class="allcomments">
@@ -103,7 +101,7 @@
                   </p>
                 </div>
                 <div class="under_text">
-                  <div>
+                  <div class="button_answer">
                     <img src="images\otvet.svg" alt="otvet" />
                     <p>Ответить</p>
                   </div>
@@ -171,7 +169,7 @@
                   </p>
                 </div>
                 <div class="under_text">
-                  <div>
+                  <div class="button_answer">
                     <img src="images\otvet.svg" alt="otvet" />
                     <p>Ответить</p>
                   </div>
@@ -188,8 +186,6 @@
               </div>
             </div>
           </div>
-
-          <div class="parent"></div>
         </div>
       </div>
     </main>

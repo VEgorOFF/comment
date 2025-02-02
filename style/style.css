@@ -13,7 +13,7 @@ header {
 
 main {
   width: 1440px;
-  height: 1302px;
+  /* height: 1302px; */
   margin: 0 auto;
   display: flex;
   flex-flow: row nowrap;
@@ -244,17 +244,6 @@ main {
   resize: none;
 }
 
-.message::placeholder {
-  /* color: red; */
-}
-
-/* .message {
-  resize: none;
-  &.auto {
-      overflow-y: hidden;
-  }
-} */
-
 .send {
   /* align-self: flex-end; */
   width: 213px;
@@ -385,6 +374,7 @@ main {
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
+  word-break: break-all;
 }
 
 .under_text p {
