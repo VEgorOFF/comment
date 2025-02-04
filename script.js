@@ -20,13 +20,17 @@ function getStartComments() {
 
     let commentText = document.createElement("div");
     commentText.className = "comment_text";
-    commentText.innerHTML =
-      '<p>Самое обидное когда сценарий по сути есть - в виде книг, где нет сюжетных дыр, всё логично, стройное повествование и достаточно взять и экранизировать оригинал как это было в первых фильмах с минимальным количеством отсебятины и зритель с восторгом примет любой такой фильм и сериал, однако вместо этого "Кольца власти" просто позаимствовали имена из оригинала, куски истории, мало связанные между собой и выдали очередной среднячковый сериал на один раз в лучшем случае.</p>';
+    if (localStorage.getItem(`"text${i}"`) !== null) {
+      commentText.innerText = `${localStorage.getItem(`"text${i}"`)}`;
+    } else {
+      commentText.innerText =
+        'Самое обидное когда сценарий по сути есть - в виде книг, где нет сюжетных дыр, всё логично, стройное повествование и достаточно взять и экранизировать оригинал как это было в первых фильмах с минимальным количеством отсебятины и зритель с восторгом примет любой такой фильм и сериал, однако вместо этого "Кольца власти" просто позаимствовали имена из оригинала, куски истории, мало связанные между собой и выдали очередной среднячковый сериал на один раз в лучшем случае.';
+      localStorage.setItem(`"text${i}"`, commentText.textContent);
+    }
 
     let underText = document.createElement("div");
     underText.className = "under_text";
-    underText.innerHTML =
-      '<div class="button_answer"><img src="images/otvet.svg" alt="otvet" /><p>Ответить</p></div><div><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button>-</button><p class="number_likes">6</p><button>+</button></div>';
+    underText.innerHTML = '<div class="button_answer"><img src="images/otvet.svg" alt="otvet" /><p>Ответить</p></div><div><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button>-</button><p class="number_likes">6</p><button>+</button></div>';
 
     authorAndMessage.appendChild(avatarAuthor);
     authorAndMessage.appendChild(authorAndText);
@@ -43,15 +47,12 @@ function getStartComments() {
     let dateAndTime = document.createElement("div");
     var nowTime = new Date();
     dateAndTime.className = "date_and_time";
-    dateAndTime.innerHTML = `<p>${padTo2Digits(
-      nowTime.getDate()
-    )}.${padTo2Digits(nowTime.getMonth() + 1)} ${padTo2Digits(
-      nowTime.getHours()
-    )}:${padTo2Digits(nowTime.getMinutes())}</p>`;
-    if (localStorage.getItem("date") !== 0) {
-      dateAndTime.innerHTML = `${localStorage.getItem("date")}`;
+    if (localStorage.getItem(`"date${i}"`) !== null) {
+      dateAndTime.innerText = `${localStorage.getItem(`"date${i}"`)}`;
+    } else {
+      dateAndTime.innerText = `${padTo2Digits(nowTime.getDate())}.${padTo2Digits(nowTime.getMonth() + 1)} ${padTo2Digits(nowTime.getHours())}:${padTo2Digits(nowTime.getMinutes())}`;
+      localStorage.setItem(`"date${i}"`, dateAndTime.textContent);
     }
-    localStorage.setItem("date", dateAndTime);
 
     authorAndText.appendChild(nameAuthor);
     authorAndText.appendChild(dateAndTime);
@@ -62,19 +63,11 @@ function getApi() {
   let blockFetch = document.querySelectorAll(".blockFetch");
 
   for (let i = 0; i < blockFetch.length; i++) {
-    if (
-      localStorage.getItem(`firstName[${i}]`) !== null &&
-      localStorage.getItem(`lastName[${i}]`) !== null &&
-      localStorage.getItem(`picture[${i}]`) !== null
-    ) {
+    if (localStorage.getItem(`firstName[${i}]`) !== null && localStorage.getItem(`lastName[${i}]`) !== null && localStorage.getItem(`picture[${i}]`) !== null) {
       let divFirstName = blockFetch[i].querySelector(".name_author");
       let divPhoto = blockFetch[i].querySelector(".avatar_author");
-      divFirstName.innerHTML = `${localStorage.getItem(
-        `firstName[${i}]`
-      )} ${localStorage.getItem(`lastName[${i}]`)}`;
-      divPhoto.innerHTML = `<img src="${localStorage.getItem(
-        `picture[${i}]`
-      )}">`;
+      divFirstName.innerHTML = `${localStorage.getItem(`firstName[${i}]`)} ${localStorage.getItem(`lastName[${i}]`)}`;
+      divPhoto.innerHTML = `<img src="${localStorage.getItem(`picture[${i}]`)}">`;
     } else {
       fetch("https://randomuser.me/api/")
         .then((res) => res.json())
@@ -127,10 +120,7 @@ function sortCount() {
 
   sortCountLikes.addEventListener("click", function () {
     sortName.innerHTML = sortCountLikes.querySelector("p").textContent;
-    localStorage.setItem(
-      "sortName",
-      sortCountLikes.querySelector("p").textContent
-    );
+    localStorage.setItem("sortName", sortCountLikes.querySelector("p").textContent);
     sortComments();
   });
 
@@ -141,38 +131,29 @@ function sortCount() {
 
   sortCountAnswers.addEventListener("click", function () {
     sortName.innerHTML = sortCountAnswers.querySelector("p").textContent;
-    localStorage.setItem(
-      "sortName",
-      sortCountAnswers.querySelector("p").textContent
-    );
+    localStorage.setItem("sortName", sortCountAnswers.querySelector("p").textContent);
   });
 }
 
 function sortComments() {
   let allComments = document.querySelector(".allcomments");
   let arrAllComments = Array.from(allComments.children);
-  let sortArrAllComments = arrAllComments.sort(
-    (a, b) =>
-      b.querySelector(".number_likes").textContent -
-      a.querySelector(".number_likes").textContent
-  );
+  let sortArrAllComments = arrAllComments.sort((a, b) => b.querySelector(".number_likes").textContent - a.querySelector(".number_likes").textContent);
 
-  sortArrAllComments.forEach((el) =>
-    document.querySelector(".allcomments").appendChild(el)
-  );
+  sortArrAllComments.forEach((el) => document.querySelector(".allcomments").appendChild(el));
 
   // let countLikes = document.querySelectorAll(".number_likes");
   // console.log(sortArrAllComments);
 }
 
-let allComments = document.querySelector(".allcomments");
-
 function sendComment() {
   getComments();
+  let allComments = document.querySelector(".allcomments");
   let buttonSend = document.querySelector(".send");
   let textArea = document.querySelector(".message");
   let maxText = document.querySelector(".max_text");
   let warningText = document.querySelector(".warning_text");
+  let indexAuthorComment = 0;
 
   // indexCommentInLocalStorage = 0;
 
@@ -187,7 +168,6 @@ function sendComment() {
   textArea.addEventListener("input", function () {
     textArea.style.height = "5px";
     textArea.style.height = `${textArea.scrollHeight}px`;
-    // console.log(textArea.scrollHeight);
   });
 
   textArea.addEventListener("input", function (event) {
@@ -219,7 +199,7 @@ function sendComment() {
 
   buttonSend.addEventListener("click", function () {
     let newComment = document.createElement("div");
-    newComment.className = "comment_people";
+    newComment.className = "comment_people author_comments";
     let authorAndMessage = document.createElement("div");
     authorAndMessage.className = "author_and_message";
     function padTo2Digits(num) {
@@ -234,18 +214,16 @@ function sendComment() {
     let cloneAuthorName = authorName.cloneNode(true);
     let timeComment = document.createElement("div");
     timeComment.className = "date_and_time";
-    timeComment.innerHTML = `<p>${padTo2Digits(
-      nowTime.getDate()
-    )}.${padTo2Digits(nowTime.getMonth() + 1)} ${padTo2Digits(
-      nowTime.getHours()
-    )}:${padTo2Digits(nowTime.getMinutes())}</p>`;
+    timeComment.innerText = `${padTo2Digits(nowTime.getDate())}.${padTo2Digits(nowTime.getMonth() + 1)} ${padTo2Digits(nowTime.getHours())}:${padTo2Digits(nowTime.getMinutes())}`;
+    localStorage.setItem(`"dateAuthorComment${indexAuthorComment}"`, timeComment.textContent);
     let commentText = document.createElement("div");
     commentText.className = "comment_text";
-    commentText.innerHTML = `<p>${textArea.value}</p>`;
+    commentText.innerText = `${textArea.value}`;
+    localStorage.setItem(`'authorComment${indexAuthorComment}'`, commentText.textContent);
+
     let underText = document.createElement("div");
     underText.className = "under_text";
-    underText.innerHTML =
-      '<div class="button_answer"><img src="images/otvet.svg" alt="otvet" /><p>Ответить</p></div><div><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button>-</button><p class="number_likes">6</p><button>+</button></div>';
+    underText.innerHTML = '<div class="button_answer"><img src="images/otvet.svg" alt="otvet" /><p>Ответить</p></div><div><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button>-</button><p class="number_likes">6</p><button>+</button></div>';
     authorAndText.appendChild(cloneAuthorName);
     authorAndText.appendChild(timeComment);
     authorAndMessage.appendChild(cloneAuthorAvatar);
@@ -257,7 +235,7 @@ function sendComment() {
     commentsCount();
     textArea.value = "";
     textArea.style.height = "43.531px";
-    localStorage.setItem("comment", allComments.innerHTML);
+    // localStorage.setItem("comment", allComments.innerHTML);
 
     // document
     //   .querySelector(".button_answer")
@@ -270,16 +248,36 @@ function sendComment() {
     //     message.appendChild(cloneFormSend);
     //     // answer();
     //   });
+    indexAuthorComment++;
   });
 }
 
 function getComments() {
-  if (localStorage.getItem("comment") !== null) {
-    allComments.innerHTML = localStorage.getItem(`comment`);
-    commentsCount();
-  } else {
-    commentsCount();
+  let timeComment = document.querySelector(".date_and_time");
+  let commentText = document.querySelector(".comment_text");
+  // let authorComments = document.querySelectorAll(".author_comments");
+
+  let i = 0;
+  while (localStorage.getItem(`"dateAuthorComment${i}"`) !== null && localStorage.getItem(`'authorComment${i}'`) !== null) {
+    timeComment.innerText = `${localStorage.getItem(`"dateAuthorComment${i}"`)}`;
+    commentText.innerText = `${localStorage.getItem(`'authorComment${i}'`)}`;
+    i++;
   }
+
+  // for (let i = 0; i < authorComments.length; i++) {
+  //   if (localStorage.getItem(`"dateAuthorComment${i}"`) !== null && localStorage.getItem(`'authorComment${i}'`) !== null) {
+  //     console.log(i);
+  //   } else {
+  //     console.log("worked");
+  //   }
+  // }
+
+  // if (localStorage.getItem("comment") !== null) {
+  //   allComments.innerHTML = localStorage.getItem(`comment`);
+  //   commentsCount();
+  // } else {
+  //   commentsCount();
+  // }
 }
 
 // function answer() {
