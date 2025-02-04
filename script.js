@@ -147,14 +147,12 @@ function sortComments() {
 }
 
 function sendComment() {
-  getComments();
   let allComments = document.querySelector(".allcomments");
   let buttonSend = document.querySelector(".send");
   let textArea = document.querySelector(".message");
   let maxText = document.querySelector(".max_text");
   let warningText = document.querySelector(".warning_text");
-  let indexAuthorComment = 0;
-
+  let indexAuthorComment;
   // indexCommentInLocalStorage = 0;
 
   // textArea.forEach((el) => {
@@ -165,6 +163,13 @@ function sendComment() {
   //     el.style.height = el.scrollHeight + "px";
   //   });
   // });
+
+  if (localStorage.getItem("indexAuthorComment") !== null) {
+    indexAuthorComment = localStorage.getItem("indexAuthorComment");
+  } else {
+    indexAuthorComment = 0;
+  }
+
   textArea.addEventListener("input", function () {
     textArea.style.height = "5px";
     textArea.style.height = `${textArea.scrollHeight}px`;
@@ -193,7 +198,7 @@ function sendComment() {
         warningText.style.display = "none";
       }
     } else {
-      maxText.innerHTML = "Макс. 1000 символов";
+      maxText.innerText = "Макс. 1000 символов";
     }
   });
 
@@ -233,9 +238,13 @@ function sendComment() {
     newComment.appendChild(authorAndMessage);
     allComments.insertBefore(newComment, allComments.firstChild);
     commentsCount();
+
     textArea.value = "";
     textArea.style.height = "43.531px";
-    // localStorage.setItem("comment", allComments.innerHTML);
+    buttonSend.setAttribute("disabled", "");
+    buttonSend.style.background = "#a1a1a1";
+    buttonSend.classList.remove("hover-style");
+    maxText.innerText = "Макс. 1000 символов";
 
     // document
     //   .querySelector(".button_answer")
@@ -248,19 +257,55 @@ function sendComment() {
     //     message.appendChild(cloneFormSend);
     //     // answer();
     //   });
+
     indexAuthorComment++;
+    localStorage.setItem("indexAuthorComment", indexAuthorComment);
+    console.log(indexAuthorComment);
   });
 }
 
 function getComments() {
-  let timeComment = document.querySelector(".date_and_time");
-  let commentText = document.querySelector(".comment_text");
-  // let authorComments = document.querySelectorAll(".author_comments");
-
   let i = 0;
   while (localStorage.getItem(`"dateAuthorComment${i}"`) !== null && localStorage.getItem(`'authorComment${i}'`) !== null) {
+    let allComments = document.querySelector(".allcomments");
+    let newComment = document.createElement("div");
+    newComment.className = "comment_people author_comments";
+
+    let authorAndMessage = document.createElement("div");
+    authorAndMessage.className = "author_and_message";
+
+    let avatarAuthor = document.createElement("div");
+    avatarAuthor.className = "avatar_author";
+    avatarAuthor.innerHTML = `<img src="${localStorage.getItem(`picture[0]`)}">`;
+
+    let authorAndText = document.createElement("div");
+    authorAndText.className = "author_and_text";
+
+    let nameAuthor = document.createElement("div");
+    nameAuthor.className = "name_author";
+    nameAuthor.innerHTML = `${localStorage.getItem(`firstName[0]`)} ${localStorage.getItem(`lastName[0]`)}`;
+
+    let timeComment = document.createElement("div");
+    timeComment.className = "date_and_time";
     timeComment.innerText = `${localStorage.getItem(`"dateAuthorComment${i}"`)}`;
+
+    let commentText = document.createElement("div");
+    commentText.className = "comment_text";
     commentText.innerText = `${localStorage.getItem(`'authorComment${i}'`)}`;
+
+    let underText = document.createElement("div");
+    underText.className = "under_text";
+    underText.innerHTML = '<div class="button_answer"><img src="images/otvet.svg" alt="otvet" /><p>Ответить</p></div><div><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button>-</button><p class="number_likes">6</p><button>+</button></div>';
+
+    allComments.insertBefore(newComment, allComments.firstChild)[i];
+    newComment.appendChild(authorAndMessage)[i];
+    authorAndMessage.appendChild(avatarAuthor)[i];
+    authorAndMessage.appendChild(authorAndText)[i];
+    authorAndText.appendChild(nameAuthor)[i];
+    authorAndText.appendChild(timeComment)[i];
+    authorAndMessage.appendChild(commentText)[i];
+    authorAndMessage.appendChild(underText)[i];
+
     i++;
   }
 
@@ -338,8 +383,9 @@ document.addEventListener("DOMContentLoaded", mainStart);
 
 function mainStart() {
   getStartComments();
+  getComments();
   getApi();
-  // commentsCount();
+  commentsCount();
   sortCount();
   sendComment();
   // answer();
