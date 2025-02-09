@@ -40,10 +40,6 @@ function getStartComments() {
     let nameAuthor = document.createElement("div");
     nameAuthor.className = "name_author";
 
-    function padTo2Digits(num) {
-      return num.toString().padStart(2, "0"); // Преобразует 9 в 09, а 10 оставит без изменений
-    }
-
     let dateAndTime = document.createElement("div");
     var nowTime = new Date();
     dateAndTime.className = "date_and_time";
@@ -141,17 +137,14 @@ function sortComments() {
   let sortArrAllComments = arrAllComments.sort((a, b) => b.querySelector(".number_likes").textContent - a.querySelector(".number_likes").textContent);
 
   sortArrAllComments.forEach((el) => document.querySelector(".allcomments").appendChild(el));
-
-  // let countLikes = document.querySelectorAll(".number_likes");
-  // console.log(sortArrAllComments);
 }
 
 function sendComment() {
   let allComments = document.querySelector(".allcomments");
-  let buttonSend = document.querySelector(".send");
-  let textArea = document.querySelector(".message");
-  let maxText = document.querySelector(".max_text");
-  let warningText = document.querySelector(".warning_text");
+  let buttonSend = document.querySelectorAll(".send")[0];
+  let textArea = document.querySelectorAll(".message")[0];
+  let maxText = document.querySelectorAll(".max_text")[0];
+  let warningText = document.querySelectorAll(".warning_text")[0];
   let indexAuthorComment;
   // indexCommentInLocalStorage = 0;
 
@@ -207,9 +200,7 @@ function sendComment() {
     newComment.className = "comment_people author_comments";
     let authorAndMessage = document.createElement("div");
     authorAndMessage.className = "author_and_message";
-    function padTo2Digits(num) {
-      return num.toString().padStart(2, "0"); // Преобразует 9 в 09, а 10 оставит без изменений
-    }
+
     var nowTime = new Date();
     let authorAvatar = document.getElementById("avatar");
     let cloneAuthorAvatar = authorAvatar.cloneNode(true);
@@ -246,21 +237,8 @@ function sendComment() {
     buttonSend.classList.remove("hover-style");
     maxText.innerText = "Макс. 1000 символов";
 
-    // document
-    //   .querySelector(".button_answer")
-    //   .addEventListener("click", function () {
-    //     let formSend = document.querySelector(".comment_author");
-    //     let cloneFormSend = formSend.cloneNode(true);
-    //     cloneFormSend.style = "padding-left: 91px";
-
-    //     let message = document.querySelector(".comment_people");
-    //     message.appendChild(cloneFormSend);
-    //     // answer();
-    //   });
-
     indexAuthorComment++;
     localStorage.setItem("indexAuthorComment", indexAuthorComment);
-    console.log(indexAuthorComment);
   });
 }
 
@@ -308,41 +286,134 @@ function getComments() {
 
     i++;
   }
+}
 
-  // for (let i = 0; i < authorComments.length; i++) {
-  //   if (localStorage.getItem(`"dateAuthorComment${i}"`) !== null && localStorage.getItem(`'authorComment${i}'`) !== null) {
-  //     console.log(i);
-  //   } else {
-  //     console.log("worked");
-  //   }
-  // }
+function answerButton() {
+  let buttonAnswer = document.querySelectorAll(".button_answer");
+  let messages = document.querySelectorAll(".comment_people");
 
-  // if (localStorage.getItem("comment") !== null) {
-  //   allComments.innerHTML = localStorage.getItem(`comment`);
-  //   commentsCount();
-  // } else {
-  //   commentsCount();
+  let formSend = document.querySelector(".comment_author");
+  let cloneFormSend = formSend.cloneNode(true);
+  cloneFormSend.id = "form_answer";
+
+  buttonAnswer.forEach(function (btn, index) {
+    btn.addEventListener("click", function () {
+      messages[index].appendChild(cloneFormSend);
+      sendAnswer(index);
+
+      console.log("answerButton Worked");
+    });
+  });
+
+  // for (let i = 0; i < buttonAnswer.length; i++) {
+  //   buttonAnswer[i].addEventListener("click", function () {
+  //     messages[i].appendChild(cloneFormSend);
+  //     messageAtributeIndex = messages[i].getAttribute("data-index");
+  //     console.log(messages[i]);
+  //     sendAnswer(messageAtributeIndex);
+  //     console.log(messageAtributeIndex);
+  //     // if (messages[i].getAttribute("data-index") === buttonAnswer[i].getAttribute("data-index")) {
+
+  //     // }
+  //   });
   // }
 }
 
-// function answer() {
-//   let buttonAnswer = document.querySelectorAll(".button_answer");
-//   let messages = document.querySelectorAll(".comment_people");
+function sendAnswer(messageAtributeIndex) {
+  console.log("sendAnswer", messageAtributeIndex);
 
-//   let formSend = document.querySelector(".comment_author");
-//       let cloneFormSend = formSend.cloneNode(true);
-//       cloneFormSend.style = "padding-left: 91px";
-//   for (let i = 0; i < buttonAnswer.length; i++) {
-//     buttonAnswer[i].addEventListener("click", function () {
+  document.getElementById("form_answer").style = "display: grid padding-left: 91px";
+  document.getElementById("form_answer").style = "padding-left: 91px";
+  // let buttonAnswer = document.querySelectorAll(".button_answer");
+  let messages = document.querySelectorAll(".comment_people");
 
-//   if (messages[i].getAttribute('data-index') === buttonAnswer[i].getAttribute('data-index')) {
-//     messages[i].appendChild(cloneFormSend);
-//     console.log("worked");
-//   }
+  let buttonSendAnswer = document.querySelector("#form_answer").querySelector(".send");
+  let textAreaAnswer = document.querySelector("#form_answer").querySelector(".message");
+  let maxTextAnswer = document.querySelector("#form_answer").querySelector(".max_text");
+  let warningTextAnswer = document.querySelector("#form_answer").querySelector(".warning_text");
 
-//     });
-//   }
-// }
+  buttonSendAnswer.style = "width: 100px";
+
+  // messages[messageAtributeIndex].removeChild(document.getElementById("form_answer"));
+
+  textAreaAnswer.addEventListener("input", function (event) {
+    console.log("работает2");
+
+    textAreaAnswer.style.height = "5px";
+    textAreaAnswer.style.height = `${textAreaAnswer.scrollHeight}px`;
+
+    if (event.target.value.length === 0) {
+      buttonSendAnswer.setAttribute("disabled", "");
+      buttonSendAnswer.style.background = "#a1a1a1";
+      buttonSendAnswer.classList.remove("hover-style");
+    } else {
+      buttonSendAnswer.removeAttribute("disabled");
+      buttonSendAnswer.style.background = "#ABD873";
+      buttonSendAnswer.classList.add("hover-style");
+    }
+    if (event.target.value.length > 0) {
+      maxTextAnswer.innerHTML = `${event.target.value.length}/1000`;
+      if (event.target.value.length > 1000) {
+        buttonSendAnswer.setAttribute("disabled", "");
+        buttonSendAnswer.style.background = "#a1a1a1";
+        buttonSendAnswer.classList.remove("hover-style");
+        maxTextAnswer.setAttribute("style", "color:red; opacity: 1;");
+        warningTextAnswer.style.display = "flex";
+      } else {
+        maxTextAnswer.setAttribute("style", "color:black; opacity: 0.4;");
+        warningTextAnswer.style.display = "none";
+      }
+    } else {
+      maxTextAnswer.innerText = "Макс. 1000 символов";
+    }
+  });
+
+  buttonSendAnswer.addEventListener("click", function () {
+    // let comments = document.querySelectorAll(".comment_people");
+    let answer = document.createElement("div");
+    answer.className = "answer";
+    let authorAndMessage = document.createElement("div");
+    authorAndMessage.className = "author_and_message";
+    let avatarAuthor = document.getElementById("avatar").cloneNode(true);
+    avatarAuthor.className = "avatar_author";
+    let authorAndText = document.createElement("div");
+    authorAndText.className = "author_and_text author_and_text_answer";
+    let authorName = document.getElementById("name");
+    let cloneAuthorName = authorName.cloneNode(true);
+    let timeComment = document.createElement("div");
+    var nowTime = new Date();
+    timeComment.className = "date_and_time";
+    timeComment.innerText = `${padTo2Digits(nowTime.getDate())}.${padTo2Digits(nowTime.getMonth() + 1)} ${padTo2Digits(nowTime.getHours())}:${padTo2Digits(nowTime.getMinutes())}`;
+
+    let commentText = document.createElement("div");
+    commentText.className = "comment_text";
+    commentText.innerText = `${textAreaAnswer.value}`;
+    let underText = document.createElement("div");
+    underText.className = "under_text under_text_answer";
+    underText.innerHTML = '<div><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button>-</button><p>3</p><button>+</button></div>';
+
+    authorAndText.appendChild(cloneAuthorName);
+    authorAndText.appendChild(timeComment);
+    authorAndMessage.appendChild(underText);
+    authorAndMessage.appendChild(commentText);
+    authorAndMessage.appendChild(authorAndText);
+    authorAndMessage.appendChild(avatarAuthor);
+    answer.appendChild(authorAndMessage);
+
+    messages[messageAtributeIndex].appendChild(answer);
+
+    textAreaAnswer.value = "";
+    textAreaAnswer.style.height = "43.531px";
+    buttonSendAnswer.setAttribute("disabled", "");
+    buttonSendAnswer.style.background = "#a1a1a1";
+    buttonSendAnswer.classList.remove("hover-style");
+    maxTextAnswer.innerText = "Макс. 1000 символов";
+
+    console.log("SendButton Worked");
+    document.getElementById("form_answer").style = "display: none";
+    // messages.removeChild(document.getElementById("form_answer"));
+  });
+}
 
 // function createBlockAnswer() {
 //   // let formSend = document.querySelector(".comment_author");
@@ -352,32 +423,38 @@ function getComments() {
 //   // if (document.querySelector('.comment_people').getAttribute('data-index') = document.querySelector('.button_answer').getAttribute('data-index')) {
 
 //   // }
-//   // let messages = document.querySelectorAll(".comment_people");
+//   let messages = document.querySelectorAll(".comment_people");
 
-//   // message.appendChild(cloneFormSend);
+//   // messages.appendChild(cloneFormSend);
 
-//   // let answer = document.createElement("div");
-//   // answer.className = "answer";
-//   // let authorAndMessage = document.createElement("div");
-//   // authorAndMessage.className = "author_and_message";
-//   // let avatarAuthor = document.createElement("div");
-//   // avatarAuthor.className = "avatar_author";
-//   // let authorAndText = document.createElement("div");
-//   // authorAndText.className = "author_and_text author_and_text_answer";
+//   let answer = document.createElement("div");
+//   answer.className = "answer";
+//   let authorAndMessage = document.createElement("div");
+//   authorAndMessage.className = "author_and_message";
+//   let avatarAuthor = document.createElement("div");
+//   avatarAuthor.className = "avatar_author";
+//   avatarAuthor = document.getElementById("avatar").cloneNode(true);
 
-//   // let commentText = document.createElement("div");
-//   // commentText.className = "comment_text";
-//   // let underText = document.createElement("div");
-//   // underText.className = "under_text under_text_answer";
-//   // underText.innerHTML = '<div><img src="imagesizbran.svg" alt="izbran" /><p>В избранное</p></div><div><button>-</button><p>3</p><button>+</button></div>';
+//   let authorAndText = document.createElement("div");
+//   authorAndText.className = "author_and_text author_and_text_answer";
 
-//   // authorAndMessage.appendChild(underText);
-//   // authorAndMessage.appendChild(commentText);
-//   // authorAndMessage.appendChild(authorAndText);
-//   // authorAndMessage.appendChild(avatarAuthor);
-//   // answer.appendChild(authorAndMessage);
-//   // message.appendChild(answer);
+//   let commentText = document.createElement("div");
+//   commentText.className = "comment_text";
+//   let underText = document.createElement("div");
+//   underText.className = "under_text under_text_answer";
+//   underText.innerHTML = '<div><img src="imagesizbran.svg" alt="izbran" /><p>В избранное</p></div><div><button>-</button><p>3</p><button>+</button></div>';
+
+//   authorAndMessage.appendChild(underText);
+//   authorAndMessage.appendChild(commentText);
+//   authorAndMessage.appendChild(authorAndText);
+//   authorAndMessage.appendChild(avatarAuthor);
+//   answer.appendChild(authorAndMessage);
+//   messages.appendChild(answer);
 // }
+
+function padTo2Digits(num) {
+  return num.toString().padStart(2, "0"); // Преобразует 9 в 09, а 10 оставит без изменений
+}
 
 document.addEventListener("DOMContentLoaded", mainStart);
 
@@ -388,5 +465,43 @@ function mainStart() {
   commentsCount();
   sortCount();
   sendComment();
-  // answer();
+  answerButton();
 }
+
+// let cloneFormSend = document.createElement("div");
+// cloneFormSend.className = "comment_author blockFetch";
+// let avatarAuthor = document.createElement("div");
+// avatarAuthor.className = "avatar_author";
+// avatarAuthor.id = "avatar";
+// cloneFormSend.appendChild(avatarAuthor);
+// let textOnMessage = document.createElement("div");
+// cloneFormSend.appendChild(textOnMessage);
+// let nameAuthor = document.createElement("div");
+// nameAuthor.className = "name_author";
+// nameAuthor.id = "name";
+// let maxText = document.createElement("div");
+// maxText.className = "max_text";
+// textOnMessage.appendChild(nameAuthor);
+// textOnMessage.appendChild(maxText);
+// let warningText = document.createElement("div");
+// warningText.className = "warning_text";
+// cloneFormSend.appendChild(warningText);
+// let formInput = document.createElement("div");
+// formInput.className = "form_send";
+// cloneFormSend.appendChild(formInput);
+// let form = document.createElement("form");
+// form.id = "send_comment";
+// formInput.appendChild(form);
+// let label = document.createElement("label");
+// form.appendChild(label);
+// let textArea = document.createElement("textarea");
+// textArea.className = "message";
+// textArea.type = "text";
+// textArea.placeholder = "Введите текст...";
+// label.appendChild(textArea);
+// let button = document.createElement("button");
+// button.className = "send";
+// button.type = "button";
+// button.form = "send_comment";
+// cloneFormSend.appendChild(button);
+// cloneFormSend.id = "form_answer";
