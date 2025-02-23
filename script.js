@@ -95,14 +95,9 @@ function getApi() {
 function commentsCount() {
   let commentPeople = document.querySelectorAll(".comment_people");
   let buttonAnswer = document.querySelectorAll(".button_answer");
-  // let buttonFavorites = document.querySelectorAll(".button_favorites");
   let divCount = document.querySelector(".first p:last-child");
   divCount.innerHTML = `(${commentPeople.length})`;
 
-  // commentPeople.forEach(function (comm, index) {
-  //   comm.setAttribute("data-index", commentPeople.length);
-  //   --commentPeople.length;
-  // });
   let id = commentPeople.length - 1;
   for (i = 0; i < commentPeople.length; i++) {
     commentPeople[i].setAttribute("data-index", id);
@@ -110,8 +105,6 @@ function commentsCount() {
     id = id - 1;
 
     localStorage.setItem(`id_comment[${i}]`, i);
-    // buttonAnswer[i].setAttribute("data-index", i);
-    // buttonFavorites[i].setAttribute("data-index", i);
   }
 }
 
@@ -173,16 +166,6 @@ function sendComment() {
   let maxText = document.querySelectorAll(".max_text")[0];
   let warningText = document.querySelectorAll(".warning_text")[0];
   let indexAuthorComment;
-  // indexCommentInLocalStorage = 0;
-
-  // textArea.forEach((el) => {
-  //   el.style.height = el.setAttribute("style", "height: " + el.scrollHeight + "px");
-  //   el.classList.add("auto");
-  //   el.addEventListener("input", (e) => {
-  //     el.style.height = "auto";
-  //     el.style.height = el.scrollHeight + "px";
-  //   });
-  // });
 
   if (localStorage.getItem("indexAuthorComment") !== null) {
     indexAuthorComment = localStorage.getItem("indexAuthorComment");
@@ -190,12 +173,10 @@ function sendComment() {
     indexAuthorComment = 0;
   }
 
-  textArea.addEventListener("input", function () {
+  textArea.addEventListener("input", function (event) {
     textArea.style.height = "5px";
     textArea.style.height = `${textArea.scrollHeight}px`;
-  });
 
-  textArea.addEventListener("input", function (event) {
     if (event.target.value.length === 0) {
       buttonSend.setAttribute("disabled", "");
       buttonSend.style.background = "#a1a1a1";
@@ -223,6 +204,7 @@ function sendComment() {
   });
 
   buttonSend.addEventListener("click", function () {
+    //отправка комментария
     let newComment = document.createElement("div");
     newComment.className = "comment_people author_comments";
     let authorAndMessage = document.createElement("div");
@@ -267,7 +249,6 @@ function sendComment() {
     maxText.innerText = "Макс. 1000 символов";
 
     indexAuthorComment++;
-
     localStorage.setItem("indexAuthorComment", indexAuthorComment);
   });
 }
@@ -325,59 +306,77 @@ function getComments() {
   }
 }
 
+function getAnswers() {
+  let messages = document.querySelectorAll(".comment_people");
+
+  for (let i = 0; i <= localStorage.getItem("indexAuthorAnswer"); i++) {
+    for (let k = 0; k <= localStorage.getItem("indexAuthorAnswer"); k++) {
+      if (localStorage.getItem(`dateAnswer${i}.index${k}`) !== null && localStorage.getItem(`authorAnswer${i}.index${k}`) !== null && localStorage.getItem(`idAnswerParent${i}.index${k}`) !== null) {
+        let answer = document.createElement("div");
+        answer.className = "answer";
+        let authorAndMessage = document.createElement("div");
+        authorAndMessage.className = "author_and_message";
+        let avatarAuthor = document.getElementById("avatar").cloneNode(true);
+        avatarAuthor.className = "avatar_author";
+        let authorAndText = document.createElement("div");
+        authorAndText.className = "author_and_text author_and_text_answer";
+        let authorName = document.getElementById("name");
+        let cloneAuthorName = authorName.cloneNode(true);
+        let timeComment = document.createElement("div");
+        var nowTime = new Date();
+        timeComment.className = "date_and_time";
+        timeComment.innerText = `${localStorage.getItem(`dateAnswer${i}.index${k}`)}`;
+
+        let commentText = document.createElement("div");
+        commentText.className = "comment_text";
+        commentText.innerText = `${localStorage.getItem(`authorAnswer${i}.index${k}`)}`;
+        let underText = document.createElement("div");
+        underText.className = "under_text under_text_answer";
+        underText.innerHTML = '<div class="button_favorites"><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button>-</button><p>3</p><button>+</button></div>';
+
+        authorAndText.appendChild(cloneAuthorName);
+        authorAndText.appendChild(timeComment);
+        authorAndMessage.appendChild(underText);
+        authorAndMessage.appendChild(commentText);
+        authorAndMessage.appendChild(authorAndText);
+        authorAndMessage.appendChild(avatarAuthor);
+        answer.appendChild(authorAndMessage);
+
+        // answer.setAttribute("data-index", `${i}.${k}`);
+
+        messages[messages.length - localStorage.getItem(`idAnswerParent${i}.index${k}`) - 1].appendChild(answer);
+      }
+    }
+  }
+}
+
 //кнопки ОТВЕТИТЬ
 document.addEventListener("click", (event) => {
   let messages = document.querySelectorAll(".comment_people");
 
   if (event.target.closest(".button_answer")) {
+    messages.forEach(function (mess) {
+      //проверка есть ли блоки с отправкой ответа
+      if (mess.querySelector(".copy_form_answer") !== null) {
+        mess.querySelector(".copy_form_answer").remove();
+      }
+    });
+
     const index = event.target.closest(".button_answer").getAttribute("data-index");
     let formSend = document.querySelector(".comment_author");
     let cloneFormSend = formSend.cloneNode(true);
+    cloneFormSend.className += " copy_form_answer";
     cloneFormSend.id = "form_answer";
 
-    console.log(event.target.closest(".button_answer"));
     messages[messages.length - index - 1].appendChild(cloneFormSend);
     sendAnswer(messages.length - index - 1);
   }
 });
 
-// document.addEventListener("click", (event) => {
-//   let buttonFavorites = event.target.closest(".button_favorites");
-//   if (buttonFavorites) {
-//     const index = event.target.closest(".button_favorites").getAttribute("data-index");
-
-//       if (localStorage.getItem(`active-favorites${id}`) !== null) {
-//         buttonFavorites.setAttribute(`active-favorites${id}`, localStorage.getItem(`active-favorites${id}`));
-//         buttonFavorites.style = "color: red";
-//         buttonFavorites.innerHTML = "<p>В избранном</p>";
-//       }
-//       buttonFavorites.addEventListener("click", function () {
-//         if (localStorage.getItem(`active-favorites${id}`) !== null) {
-//           buttonFavorites.setAttribute(`active-favorites${id}`, localStorage.getItem(`active-favorites${id}`));
-//           buttonFavorites.style = "color: red";
-//           buttonFavorites.innerHTML = "<p>В избранном</p>";
-//         }
-
-//         if (buttonFavorites.hasAttribute(`active-favorites${id}`) && localStorage.getItem(`active-favorites${id}`) !== null) {
-//           buttonFavorites.removeAttribute(`active-favorites${id}`);
-//           localStorage.removeItem(`active-favorites${id}`);
-//           buttonFavorites.style = "color: black";
-//           buttonFavorites.innerHTML = '<img src="images/izbran.svg" alt="izbran" /><p>В избранное</p>';
-//         } else {
-//           buttonFavorites.style = "color: red";
-//           buttonFavorites.innerHTML = "<p>В избранном</p>";
-
-//           buttonFavorites.setAttribute(`active-favorites${id}`, true);
-//           localStorage.setItem(`active-favorites${id}`, buttonFavorites.getAttribute(`active-favorites${id}`));
-//         }
-//       });
-//     };
-// });
-
 function sendAnswer(messageAtributeIndex) {
   document.getElementById("form_answer").style = "display: grid padding-left: 91px";
   document.getElementById("form_answer").style = "padding-left: 91px";
-  // let buttonAnswer = document.querySelectorAll(".button_answer");
+
   let messages = document.querySelectorAll(".comment_people");
 
   let buttonSendAnswer = document.querySelector("#form_answer").querySelector(".send");
@@ -385,13 +384,15 @@ function sendAnswer(messageAtributeIndex) {
   let maxTextAnswer = document.querySelector("#form_answer").querySelector(".max_text");
   let warningTextAnswer = document.querySelector("#form_answer").querySelector(".warning_text");
 
+  if (localStorage.getItem("indexAuthorAnswer") !== null) {
+    indexAuthorAnswer = localStorage.getItem("indexAuthorAnswer");
+  } else {
+    indexAuthorAnswer = 0;
+  }
+
   buttonSendAnswer.style = "width: 100px";
 
-  // messages[messageAtributeIndex].removeChild(document.getElementById("form_answer"));
-
   textAreaAnswer.addEventListener("input", function (event) {
-    console.log("работает2");
-
     textAreaAnswer.style.height = "5px";
     textAreaAnswer.style.height = `${textAreaAnswer.scrollHeight}px`;
 
@@ -422,7 +423,6 @@ function sendAnswer(messageAtributeIndex) {
   });
 
   buttonSendAnswer.addEventListener("click", function () {
-    // let comments = document.querySelectorAll(".comment_people");
     let answer = document.createElement("div");
     answer.className = "answer";
     let authorAndMessage = document.createElement("div");
@@ -443,7 +443,7 @@ function sendAnswer(messageAtributeIndex) {
     commentText.innerText = `${textAreaAnswer.value}`;
     let underText = document.createElement("div");
     underText.className = "under_text under_text_answer";
-    underText.innerHTML = '<div><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button>-</button><p>3</p><button>+</button></div>';
+    underText.innerHTML = '<div class="button_favorites"><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button>-</button><p>3</p><button>+</button></div>';
 
     authorAndText.appendChild(cloneAuthorName);
     authorAndText.appendChild(timeComment);
@@ -454,7 +454,6 @@ function sendAnswer(messageAtributeIndex) {
     answer.appendChild(authorAndMessage);
 
     messages[messageAtributeIndex].appendChild(answer);
-    console.log(messages[messageAtributeIndex].appendChild(answer));
 
     textAreaAnswer.value = "";
     textAreaAnswer.style.height = "43.531px";
@@ -463,9 +462,76 @@ function sendAnswer(messageAtributeIndex) {
     buttonSendAnswer.classList.remove("hover-style");
     maxTextAnswer.innerText = "Макс. 1000 символов";
 
-    console.log("SendButton Worked");
     document.getElementById("form_answer").remove();
-    // messages.removeChild(document.getElementById("form_answer"));
+
+    // answer.setAttribute("data-index", `${answer.closest(".comment_people").getAttribute("data-index")}`);
+    localStorage.setItem(`idAnswerParent${answer.closest(".comment_people").getAttribute("data-index")}.index${indexAuthorAnswer}`, answer.closest(".comment_people").getAttribute("data-index"));
+    localStorage.setItem(`dateAnswer${answer.closest(".comment_people").getAttribute("data-index")}.index${indexAuthorAnswer}`, timeComment.textContent);
+    localStorage.setItem(`authorAnswer${answer.closest(".comment_people").getAttribute("data-index")}.index${indexAuthorAnswer}`, commentText.textContent);
+
+    indexAuthorAnswer++;
+    localStorage.setItem("indexAuthorAnswer", indexAuthorAnswer);
+  });
+}
+
+//кнопки избранное
+document.addEventListener("click", (event) => {
+  let buttonFavorites = event.target.closest(".button_favorites");
+
+  if (buttonFavorites) {
+    let id = event.target.closest(".comment_people").getAttribute("data-index");
+
+    if (event.target.closest(".answer") !== null) {
+      // event.target
+      //   .closest(".comment_people")
+      //   .querySelectorAll(".answer")
+      //   .forEach(function (el, index) {
+      //     el.setAttribute("data-index", index);
+      //   });
+
+      if (buttonFavorites.hasAttribute(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`)) {
+        localStorage.removeItem(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`);
+        buttonFavorites.removeAttribute(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`);
+        buttonFavorites.style = "color: black";
+        buttonFavorites.innerHTML = '<img src="images/izbran.svg" alt="izbran" /><p>В избранное</p>';
+      } else {
+        buttonFavorites.style = "color: red";
+        buttonFavorites.innerHTML = "<p>В избранном</p>";
+        buttonFavorites.setAttribute(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`, true);
+        localStorage.setItem(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`, buttonFavorites.getAttribute(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`));
+      }
+    } else {
+      if (buttonFavorites.hasAttribute(`active-favorites${id}`) && localStorage.getItem(`active-favorites${id}`) !== null) {
+        buttonFavorites.removeAttribute(`active-favorites${id}`);
+        localStorage.removeItem(`active-favorites${id}`);
+        buttonFavorites.style = "color: black";
+        buttonFavorites.innerHTML = '<img src="images/izbran.svg" alt="izbran" /><p>В избранное</p>';
+      } else {
+        buttonFavorites.style = "color: red";
+        buttonFavorites.innerHTML = "<p>В избранном</p>";
+
+        buttonFavorites.setAttribute(`active-favorites${id}`, true);
+        localStorage.setItem(`active-favorites${id}`, buttonFavorites.getAttribute(`active-favorites${id}`));
+      }
+    }
+  }
+});
+
+function getFavorites() {
+  let buttonFavorites = document.querySelectorAll(".button_favorites");
+
+  buttonFavorites.forEach(function (btn, index) {
+    let id = btn.closest(".comment_people").getAttribute("data-index");
+
+    if (localStorage.getItem(`active-favorites${id}`) !== null && btn.closest(".answer") === null) {
+      btn.setAttribute(`active-favorites${id}`, localStorage.getItem(`active-favorites${id}`));
+      btn.style = "color: red";
+      btn.innerHTML = "<p>В избранном</p>";
+    }
+
+    // if (localStorage.getItem(`active-favorites${id}.${btn.closest(".answer").getAttribute("data-index")}`) !== null && btn.closest(".answer") !== null) {
+    //   console.log(btn.closest(".answer"));
+    // }
   });
 }
 
@@ -510,8 +576,6 @@ function sortFavorites() {
   let isAgain = false;
 
   favoritesButton.addEventListener("click", function () {
-    console.log("worked");
-
     if (!isAgain) {
       messages.forEach(function (mess, index) {
         let id = mess.getAttribute("data-index");
@@ -608,6 +672,8 @@ function mainStart() {
   // favorites();
   sortFavorites();
   plusMinusButtons();
+  getAnswers();
+  getFavorites();
 }
 
 // let cloneFormSend = document.createElement("div");
