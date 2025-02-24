@@ -53,7 +53,11 @@ function getStartComments() {
     if (localStorage.getItem(`"date${i}"`) !== null) {
       dateAndTime.innerText = `${localStorage.getItem(`"date${i}"`)}`;
     } else {
-      dateAndTime.innerText = `${padTo2Digits(nowTime.getDate())}.${padTo2Digits(nowTime.getMonth() + 1)} ${padTo2Digits(nowTime.getHours())}:${padTo2Digits(nowTime.getMinutes())}`;
+      dateAndTime.innerText = `${padTo2Digits(
+        nowTime.getDate()
+      )}.${padTo2Digits(nowTime.getMonth() + 1)} ${padTo2Digits(
+        nowTime.getHours()
+      )}:${padTo2Digits(nowTime.getMinutes())}`;
       localStorage.setItem(`"date${i}"`, dateAndTime.textContent);
     }
 
@@ -66,11 +70,19 @@ function getApi() {
   let blockFetch = document.querySelectorAll(".blockFetch");
 
   for (let i = 0; i < blockFetch.length; i++) {
-    if (localStorage.getItem(`firstName[${i}]`) !== null && localStorage.getItem(`lastName[${i}]`) !== null && localStorage.getItem(`picture[${i}]`) !== null) {
+    if (
+      localStorage.getItem(`firstName[${i}]`) !== null &&
+      localStorage.getItem(`lastName[${i}]`) !== null &&
+      localStorage.getItem(`picture[${i}]`) !== null
+    ) {
       let divFirstName = blockFetch[i].querySelector(".name_author");
       let divPhoto = blockFetch[i].querySelector(".avatar_author");
-      divFirstName.innerHTML = `${localStorage.getItem(`firstName[${i}]`)} ${localStorage.getItem(`lastName[${i}]`)}`;
-      divPhoto.innerHTML = `<img src="${localStorage.getItem(`picture[${i}]`)}">`;
+      divFirstName.innerHTML = `${localStorage.getItem(
+        `firstName[${i}]`
+      )} ${localStorage.getItem(`lastName[${i}]`)}`;
+      divPhoto.innerHTML = `<img src="${localStorage.getItem(
+        `picture[${i}]`
+      )}">`;
     } else {
       fetch("https://randomuser.me/api/")
         .then((res) => res.json())
@@ -108,6 +120,18 @@ function commentsCount() {
   }
 }
 
+function answerCount() {
+  document.querySelectorAll(".comment_people").forEach(function (mess) {
+    console.log(mess.querySelectorAll(".answer"));
+    if (mess.querySelectorAll(".answer").length !== 0) {
+      mess.querySelectorAll(".answer").forEach(function (answer, index) {
+        answer.setAttribute("data-index", index);
+      });
+    }
+    // mess.querySelectorAll(".answer").getAttribute('data-index', index);
+  });
+}
+
 function sortCount() {
   let sortName = document.querySelector(".sort_name p");
   let sortDate = document.getElementById("date");
@@ -129,7 +153,10 @@ function sortCount() {
 
   sortCountLikes.addEventListener("click", function () {
     sortName.innerHTML = sortCountLikes.querySelector("p").textContent;
-    localStorage.setItem("sortName", sortCountLikes.querySelector("p").textContent);
+    localStorage.setItem(
+      "sortName",
+      sortCountLikes.querySelector("p").textContent
+    );
     sortComments();
   });
 
@@ -140,23 +167,38 @@ function sortCount() {
 
   sortCountAnswers.addEventListener("click", function () {
     sortName.innerHTML = sortCountAnswers.querySelector("p").textContent;
-    localStorage.setItem("sortName", sortCountAnswers.querySelector("p").textContent);
+    localStorage.setItem(
+      "sortName",
+      sortCountAnswers.querySelector("p").textContent
+    );
   });
 }
 
 function sortDateComments() {
   let allComments = document.querySelector(".allcomments");
   let arrAllComments = Array.from(allComments.children);
-  let sortArrAllComments = arrAllComments.sort((a, b) => new Date(b.querySelector(".date_and_time").textContent) - new Date(a.querySelector(".date_and_time").textContent));
-  sortArrAllComments.forEach((el) => document.querySelector(".allcomments").appendChild(el));
+  let sortArrAllComments = arrAllComments.sort(
+    (a, b) =>
+      new Date(b.querySelector(".date_and_time").textContent) -
+      new Date(a.querySelector(".date_and_time").textContent)
+  );
+  sortArrAllComments.forEach((el) =>
+    document.querySelector(".allcomments").appendChild(el)
+  );
 }
 
 function sortComments() {
   let allComments = document.querySelector(".allcomments");
   let arrAllComments = Array.from(allComments.children);
-  let sortArrAllComments = arrAllComments.sort((a, b) => b.querySelector(".number_likes").textContent - a.querySelector(".number_likes").textContent);
+  let sortArrAllComments = arrAllComments.sort(
+    (a, b) =>
+      b.querySelector(".number_likes").textContent -
+      a.querySelector(".number_likes").textContent
+  );
 
-  sortArrAllComments.forEach((el) => document.querySelector(".allcomments").appendChild(el));
+  sortArrAllComments.forEach((el) =>
+    document.querySelector(".allcomments").appendChild(el)
+  );
 }
 
 function sendComment() {
@@ -219,12 +261,22 @@ function sendComment() {
     let cloneAuthorName = authorName.cloneNode(true);
     let timeComment = document.createElement("div");
     timeComment.className = "date_and_time";
-    timeComment.innerText = `${padTo2Digits(nowTime.getDate())}.${padTo2Digits(nowTime.getMonth() + 1)} ${padTo2Digits(nowTime.getHours())}:${padTo2Digits(nowTime.getMinutes())}`;
-    localStorage.setItem(`"dateAuthorComment${indexAuthorComment}"`, timeComment.textContent);
+    timeComment.innerText = `${padTo2Digits(nowTime.getDate())}.${padTo2Digits(
+      nowTime.getMonth() + 1
+    )} ${padTo2Digits(nowTime.getHours())}:${padTo2Digits(
+      nowTime.getMinutes()
+    )}`;
+    localStorage.setItem(
+      `"dateAuthorComment${indexAuthorComment}"`,
+      timeComment.textContent
+    );
     let commentText = document.createElement("div");
     commentText.className = "comment_text";
     commentText.innerText = `${textArea.value}`;
-    localStorage.setItem(`'authorComment${indexAuthorComment}'`, commentText.textContent);
+    localStorage.setItem(
+      `'authorComment${indexAuthorComment}'`,
+      commentText.textContent
+    );
 
     let underText = document.createElement("div");
     underText.className = "under_text";
@@ -255,7 +307,10 @@ function sendComment() {
 
 function getComments() {
   let i = 0;
-  while (localStorage.getItem(`"dateAuthorComment${i}"`) !== null && localStorage.getItem(`'authorComment${i}'`) !== null) {
+  while (
+    localStorage.getItem(`"dateAuthorComment${i}"`) !== null &&
+    localStorage.getItem(`'authorComment${i}'`) !== null
+  ) {
     let allComments = document.querySelector(".allcomments");
     let newComment = document.createElement("div");
     newComment.className = "comment_people author_comments";
@@ -265,18 +320,24 @@ function getComments() {
 
     let avatarAuthor = document.createElement("div");
     avatarAuthor.className = "avatar_author";
-    avatarAuthor.innerHTML = `<img src="${localStorage.getItem(`picture[0]`)}">`;
+    avatarAuthor.innerHTML = `<img src="${localStorage.getItem(
+      `picture[0]`
+    )}">`;
 
     let authorAndText = document.createElement("div");
     authorAndText.className = "author_and_text";
 
     let nameAuthor = document.createElement("div");
     nameAuthor.className = "name_author";
-    nameAuthor.innerHTML = `${localStorage.getItem(`firstName[0]`)} ${localStorage.getItem(`lastName[0]`)}`;
+    nameAuthor.innerHTML = `${localStorage.getItem(
+      `firstName[0]`
+    )} ${localStorage.getItem(`lastName[0]`)}`;
 
     let timeComment = document.createElement("div");
     timeComment.className = "date_and_time";
-    timeComment.innerText = `${localStorage.getItem(`"dateAuthorComment${i}"`)}`;
+    timeComment.innerText = `${localStorage.getItem(
+      `"dateAuthorComment${i}"`
+    )}`;
 
     let commentText = document.createElement("div");
     commentText.className = "comment_text";
@@ -311,7 +372,11 @@ function getAnswers() {
 
   for (let i = 0; i <= localStorage.getItem("indexAuthorAnswer"); i++) {
     for (let k = 0; k <= localStorage.getItem("indexAuthorAnswer"); k++) {
-      if (localStorage.getItem(`dateAnswer${i}.index${k}`) !== null && localStorage.getItem(`authorAnswer${i}.index${k}`) !== null && localStorage.getItem(`idAnswerParent${i}.index${k}`) !== null) {
+      if (
+        localStorage.getItem(`dateAnswer${i}.index${k}`) !== null &&
+        localStorage.getItem(`authorAnswer${i}.index${k}`) !== null &&
+        localStorage.getItem(`idAnswerParent${i}.index${k}`) !== null
+      ) {
         let answer = document.createElement("div");
         answer.className = "answer";
         let authorAndMessage = document.createElement("div");
@@ -325,14 +390,19 @@ function getAnswers() {
         let timeComment = document.createElement("div");
         var nowTime = new Date();
         timeComment.className = "date_and_time";
-        timeComment.innerText = `${localStorage.getItem(`dateAnswer${i}.index${k}`)}`;
+        timeComment.innerText = `${localStorage.getItem(
+          `dateAnswer${i}.index${k}`
+        )}`;
 
         let commentText = document.createElement("div");
         commentText.className = "comment_text";
-        commentText.innerText = `${localStorage.getItem(`authorAnswer${i}.index${k}`)}`;
+        commentText.innerText = `${localStorage.getItem(
+          `authorAnswer${i}.index${k}`
+        )}`;
         let underText = document.createElement("div");
         underText.className = "under_text under_text_answer";
-        underText.innerHTML = '<div class="button_favorites"><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button>-</button><p>3</p><button>+</button></div>';
+        underText.innerHTML =
+          '<div class="button_favorites"><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button>-</button><p>3</p><button>+</button></div>';
 
         authorAndText.appendChild(cloneAuthorName);
         authorAndText.appendChild(timeComment);
@@ -344,7 +414,11 @@ function getAnswers() {
 
         // answer.setAttribute("data-index", `${i}.${k}`);
 
-        messages[messages.length - localStorage.getItem(`idAnswerParent${i}.index${k}`) - 1].appendChild(answer);
+        messages[
+          messages.length -
+            localStorage.getItem(`idAnswerParent${i}.index${k}`) -
+            1
+        ].appendChild(answer);
       }
     }
   }
@@ -362,7 +436,9 @@ document.addEventListener("click", (event) => {
       }
     });
 
-    const index = event.target.closest(".button_answer").getAttribute("data-index");
+    const index = event.target
+      .closest(".button_answer")
+      .getAttribute("data-index");
     let formSend = document.querySelector(".comment_author");
     let cloneFormSend = formSend.cloneNode(true);
     cloneFormSend.className += " copy_form_answer";
@@ -374,15 +450,24 @@ document.addEventListener("click", (event) => {
 });
 
 function sendAnswer(messageAtributeIndex) {
-  document.getElementById("form_answer").style = "display: grid padding-left: 91px";
+  document.getElementById("form_answer").style =
+    "display: grid padding-left: 91px";
   document.getElementById("form_answer").style = "padding-left: 91px";
 
   let messages = document.querySelectorAll(".comment_people");
 
-  let buttonSendAnswer = document.querySelector("#form_answer").querySelector(".send");
-  let textAreaAnswer = document.querySelector("#form_answer").querySelector(".message");
-  let maxTextAnswer = document.querySelector("#form_answer").querySelector(".max_text");
-  let warningTextAnswer = document.querySelector("#form_answer").querySelector(".warning_text");
+  let buttonSendAnswer = document
+    .querySelector("#form_answer")
+    .querySelector(".send");
+  let textAreaAnswer = document
+    .querySelector("#form_answer")
+    .querySelector(".message");
+  let maxTextAnswer = document
+    .querySelector("#form_answer")
+    .querySelector(".max_text");
+  let warningTextAnswer = document
+    .querySelector("#form_answer")
+    .querySelector(".warning_text");
 
   if (localStorage.getItem("indexAuthorAnswer") !== null) {
     indexAuthorAnswer = localStorage.getItem("indexAuthorAnswer");
@@ -436,14 +521,19 @@ function sendAnswer(messageAtributeIndex) {
     let timeComment = document.createElement("div");
     var nowTime = new Date();
     timeComment.className = "date_and_time";
-    timeComment.innerText = `${padTo2Digits(nowTime.getDate())}.${padTo2Digits(nowTime.getMonth() + 1)} ${padTo2Digits(nowTime.getHours())}:${padTo2Digits(nowTime.getMinutes())}`;
+    timeComment.innerText = `${padTo2Digits(nowTime.getDate())}.${padTo2Digits(
+      nowTime.getMonth() + 1
+    )} ${padTo2Digits(nowTime.getHours())}:${padTo2Digits(
+      nowTime.getMinutes()
+    )}`;
 
     let commentText = document.createElement("div");
     commentText.className = "comment_text";
     commentText.innerText = `${textAreaAnswer.value}`;
     let underText = document.createElement("div");
     underText.className = "under_text under_text_answer";
-    underText.innerHTML = '<div class="button_favorites"><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button>-</button><p>3</p><button>+</button></div>';
+    underText.innerHTML =
+      '<div class="button_favorites"><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button>-</button><p>3</p><button>+</button></div>';
 
     authorAndText.appendChild(cloneAuthorName);
     authorAndText.appendChild(timeComment);
@@ -465,12 +555,28 @@ function sendAnswer(messageAtributeIndex) {
     document.getElementById("form_answer").remove();
 
     // answer.setAttribute("data-index", `${answer.closest(".comment_people").getAttribute("data-index")}`);
-    localStorage.setItem(`idAnswerParent${answer.closest(".comment_people").getAttribute("data-index")}.index${indexAuthorAnswer}`, answer.closest(".comment_people").getAttribute("data-index"));
-    localStorage.setItem(`dateAnswer${answer.closest(".comment_people").getAttribute("data-index")}.index${indexAuthorAnswer}`, timeComment.textContent);
-    localStorage.setItem(`authorAnswer${answer.closest(".comment_people").getAttribute("data-index")}.index${indexAuthorAnswer}`, commentText.textContent);
+    localStorage.setItem(
+      `idAnswerParent${answer
+        .closest(".comment_people")
+        .getAttribute("data-index")}.index${indexAuthorAnswer}`,
+      answer.closest(".comment_people").getAttribute("data-index")
+    );
+    localStorage.setItem(
+      `dateAnswer${answer
+        .closest(".comment_people")
+        .getAttribute("data-index")}.index${indexAuthorAnswer}`,
+      timeComment.textContent
+    );
+    localStorage.setItem(
+      `authorAnswer${answer
+        .closest(".comment_people")
+        .getAttribute("data-index")}.index${indexAuthorAnswer}`,
+      commentText.textContent
+    );
 
     indexAuthorAnswer++;
     localStorage.setItem("indexAuthorAnswer", indexAuthorAnswer);
+    answerCount();
   });
 }
 
@@ -489,29 +595,65 @@ document.addEventListener("click", (event) => {
       //     el.setAttribute("data-index", index);
       //   });
 
-      if (buttonFavorites.hasAttribute(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`)) {
-        localStorage.removeItem(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`);
-        buttonFavorites.removeAttribute(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`);
+      if (
+        buttonFavorites.hasAttribute(
+          `active-favorites${id}.${buttonFavorites
+            .closest(".answer")
+            .getAttribute("data-index")}`
+        )
+      ) {
+        localStorage.removeItem(
+          `active-favorites${id}.${buttonFavorites
+            .closest(".answer")
+            .getAttribute("data-index")}`
+        );
+        buttonFavorites.removeAttribute(
+          `active-favorites${id}.${buttonFavorites
+            .closest(".answer")
+            .getAttribute("data-index")}`
+        );
         buttonFavorites.style = "color: black";
-        buttonFavorites.innerHTML = '<img src="images/izbran.svg" alt="izbran" /><p>В избранное</p>';
+        buttonFavorites.innerHTML =
+          '<img src="images/izbran.svg" alt="izbran" /><p>В избранное</p>';
       } else {
         buttonFavorites.style = "color: red";
         buttonFavorites.innerHTML = "<p>В избранном</p>";
-        buttonFavorites.setAttribute(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`, true);
-        localStorage.setItem(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`, buttonFavorites.getAttribute(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`));
+        buttonFavorites.setAttribute(
+          `active-favorites${id}.${buttonFavorites
+            .closest(".answer")
+            .getAttribute("data-index")}`,
+          true
+        );
+        localStorage.setItem(
+          `active-favorites${id}.${buttonFavorites
+            .closest(".answer")
+            .getAttribute("data-index")}`,
+          buttonFavorites.getAttribute(
+            `active-favorites${id}.${buttonFavorites
+              .closest(".answer")
+              .getAttribute("data-index")}`
+          )
+        );
       }
     } else {
-      if (buttonFavorites.hasAttribute(`active-favorites${id}`) && localStorage.getItem(`active-favorites${id}`) !== null) {
+      if (
+        buttonFavorites.hasAttribute(`active-favorites${id}`) &&
+        localStorage.getItem(`active-favorites${id}`) !== null
+      ) {
         buttonFavorites.removeAttribute(`active-favorites${id}`);
         localStorage.removeItem(`active-favorites${id}`);
         buttonFavorites.style = "color: black";
-        buttonFavorites.innerHTML = '<img src="images/izbran.svg" alt="izbran" /><p>В избранное</p>';
+        buttonFavorites.innerHTML =
+          '<img src="images/izbran.svg" alt="izbran" /><p>В избранное</p>';
       } else {
         buttonFavorites.style = "color: red";
         buttonFavorites.innerHTML = "<p>В избранном</p>";
 
         buttonFavorites.setAttribute(`active-favorites${id}`, true);
-        localStorage.setItem(`active-favorites${id}`, buttonFavorites.getAttribute(`active-favorites${id}`));
+        localStorage.setItem(
+          `active-favorites${id}`,
+          buttonFavorites.getAttribute(`active-favorites${id}`)
+        );
       }
     }
   }
@@ -523,8 +665,14 @@ function getFavorites() {
   buttonFavorites.forEach(function (btn, index) {
     let id = btn.closest(".comment_people").getAttribute("data-index");
 
-    if (localStorage.getItem(`active-favorites${id}`) !== null && btn.closest(".answer") === null) {
-      btn.setAttribute(`active-favorites${id}`, localStorage.getItem(`active-favorites${id}`));
+    if (
+      localStorage.getItem(`active-favorites${id}`) !== null &&
+      btn.closest(".answer") === null
+    ) {
+      btn.setAttribute(
+        `active-favorites${id}`,
+        localStorage.getItem(`active-favorites${id}`)
+      );
       btn.style = "color: red";
       btn.innerHTML = "<p>В избранном</p>";
     }
@@ -543,28 +691,41 @@ function favorites() {
     let id = mess.getAttribute("data-index");
 
     if (localStorage.getItem(`active-favorites${id}`) !== null) {
-      buttonFavorites.setAttribute(`active-favorites${id}`, localStorage.getItem(`active-favorites${id}`));
+      buttonFavorites.setAttribute(
+        `active-favorites${id}`,
+        localStorage.getItem(`active-favorites${id}`)
+      );
       buttonFavorites.style = "color: red";
       buttonFavorites.innerHTML = "<p>В избранном</p>";
     }
     buttonFavorites.addEventListener("click", function () {
       if (localStorage.getItem(`active-favorites${id}`) !== null) {
-        buttonFavorites.setAttribute(`active-favorites${id}`, localStorage.getItem(`active-favorites${id}`));
+        buttonFavorites.setAttribute(
+          `active-favorites${id}`,
+          localStorage.getItem(`active-favorites${id}`)
+        );
         buttonFavorites.style = "color: red";
         buttonFavorites.innerHTML = "<p>В избранном</p>";
       }
 
-      if (buttonFavorites.hasAttribute(`active-favorites${id}`) && localStorage.getItem(`active-favorites${id}`) !== null) {
+      if (
+        buttonFavorites.hasAttribute(`active-favorites${id}`) &&
+        localStorage.getItem(`active-favorites${id}`) !== null
+      ) {
         buttonFavorites.removeAttribute(`active-favorites${id}`);
         localStorage.removeItem(`active-favorites${id}`);
         buttonFavorites.style = "color: black";
-        buttonFavorites.innerHTML = '<img src="images/izbran.svg" alt="izbran" /><p>В избранное</p>';
+        buttonFavorites.innerHTML =
+          '<img src="images/izbran.svg" alt="izbran" /><p>В избранное</p>';
       } else {
         buttonFavorites.style = "color: red";
         buttonFavorites.innerHTML = "<p>В избранном</p>";
 
         buttonFavorites.setAttribute(`active-favorites${id}`, true);
-        localStorage.setItem(`active-favorites${id}`, buttonFavorites.getAttribute(`active-favorites${id}`));
+        localStorage.setItem(
+          `active-favorites${id}`,
+          buttonFavorites.getAttribute(`active-favorites${id}`)
+        );
       }
     });
   });
@@ -674,6 +835,7 @@ function mainStart() {
   plusMinusButtons();
   getAnswers();
   getFavorites();
+  answerCount();
 }
 
 // let cloneFormSend = document.createElement("div");
