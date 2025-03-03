@@ -1,9 +1,10 @@
 function getStartComments() {
   let allcomments = document.querySelector(".allcomments");
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i <= 2; i++) {
     let divCommentPeople = document.createElement("div");
     divCommentPeople.className = "comment_people blockFetch";
+    divCommentPeople.setAttribute("data-index", 2 - i);
 
     allcomments.appendChild(divCommentPeople);
 
@@ -23,34 +24,19 @@ function getStartComments() {
     if (localStorage.getItem(`text${i}`) !== null) {
       commentText.innerText = `${localStorage.getItem(`text${i}`)}`;
     } else {
-      commentText.innerText =
-        'Самое обидное когда сценарий по сути есть - в виде книг, где нет сюжетных дыр, всё логично, стройное повествование и достаточно взять и экранизировать оригинал как это было в первых фильмах с минимальным количеством отсебятины и зритель с восторгом примет любой такой фильм и сериал, однако вместо этого "Кольца власти" просто позаимствовали имена из оригинала, куски истории, мало связанные между собой и выдали очередной среднячковый сериал на один раз в лучшем случае.';
+      commentText.innerText = `${i}'Самое обидное когда сценарий по сути есть - в виде книг, где нет сюжетных дыр, всё логично, стройное повествование и достаточно взять и экранизировать оригинал как это было в первых фильмах с минимальным количеством отсебятины и зритель с восторгом примет любой такой фильм и сериал, однако вместо этого "Кольца власти" просто позаимствовали имена из оригинала, куски истории, мало связанные между собой и выдали очередной среднячковый сериал на один раз в лучшем случае.'`;
       localStorage.setItem(`text${i}`, commentText.textContent);
     }
 
-    if (
-      localStorage.getItem(
-        `like${
-          document.getElementsByClassName("comment_people blockFetch").length -
-          1
-        }`
-      ) !== null
-    ) {
-      likeRandom = `${localStorage.getItem(
-        `like${
-          document.getElementsByClassName("comment_people blockFetch").length -
-          1
-        }`
-      )}`;
+    if (localStorage.getItem(`newLike${divCommentPeople.getAttribute("data-index")}`) !== null) {
+      likeRandom = `${localStorage.getItem(`newLike${divCommentPeople.getAttribute("data-index")}`)}`;
     } else {
-      likeRandom = random(0, 10);
-      localStorage.setItem(
-        `like${
-          document.getElementsByClassName("comment_people blockFetch").length -
-          1
-        }`,
-        likeRandom
-      );
+      if (localStorage.getItem(`like${divCommentPeople.getAttribute("data-index")}`) !== null) {
+        likeRandom = `${localStorage.getItem(`like${divCommentPeople.getAttribute("data-index")}`)}`;
+      } else {
+        likeRandom = random(0, 10);
+        localStorage.setItem(`like${divCommentPeople.getAttribute("data-index")}`, likeRandom);
+      }
     }
 
     let underText = document.createElement("div");
@@ -71,15 +57,32 @@ function getStartComments() {
     if (localStorage.getItem(`date${i}`) !== null) {
       dateAndTime.innerText = `${localStorage.getItem(`date${i}`)}`;
     } else {
-      dateAndTime.innerText = `${padTo2Digits(
-        nowTime.getDate()
-      )}.${padTo2Digits(nowTime.getMonth() + 1)} ${padTo2Digits(
-        nowTime.getHours()
-      )}:${padTo2Digits(nowTime.getMinutes())}`;
+      dateAndTime.innerText = `${padTo2Digits(nowTime.getDate())}.${padTo2Digits(nowTime.getMonth() + 1)} ${padTo2Digits(nowTime.getHours())}:${padTo2Digits(nowTime.getMinutes())}`;
       localStorage.setItem(`date${i}`, dateAndTime.textContent);
     }
     authorAndText.appendChild(nameAuthor);
     authorAndText.appendChild(dateAndTime);
+
+    if (localStorage.getItem(`newLike${divCommentPeople.getAttribute("data-index")}`) !== null && localStorage.getItem(`newLike${divCommentPeople.getAttribute("data-index")}`) <= localStorage.getItem(`like${divCommentPeople.getAttribute("data-index")}`) - 1) {
+      authorAndMessage.querySelector(".button_minus").setAttribute("disabled", "");
+      authorAndMessage.querySelector(".button_minus").style = "color: black; opacity: 0.4;";
+    } else {
+      authorAndMessage.querySelector(".button_minus").removeAttribute("disabled");
+      authorAndMessage.querySelector(".button_minus").removeAttribute("style");
+    }
+    if (localStorage.getItem(`newLike${divCommentPeople.getAttribute("data-index")}`) !== null && localStorage.getItem(`newLike${divCommentPeople.getAttribute("data-index")}`) >= localStorage.getItem(`like${divCommentPeople.getAttribute("data-index")}`) + 1) {
+      authorAndMessage.querySelector(".button_plus").setAttribute("disabled", "");
+      authorAndMessage.querySelector(".button_plus").style = "color: black; opacity: 0.4;";
+    } else {
+      authorAndMessage.querySelector(".button_plus").removeAttribute("disabled");
+      authorAndMessage.querySelector(".button_plus").removeAttribute("style");
+    }
+
+    if (authorAndMessage.querySelector(".number_likes").textContent < 0) {
+      authorAndMessage.querySelector(".number_likes").style = "color: red";
+    } else {
+      authorAndMessage.querySelector(".number_likes").removeAttribute("style");
+    }
   }
 }
 
@@ -87,19 +90,11 @@ function getApi() {
   let blockFetch = document.querySelectorAll(".blockFetch");
 
   for (let i = 0; i < blockFetch.length; i++) {
-    if (
-      localStorage.getItem(`firstName[${i}]`) !== null &&
-      localStorage.getItem(`lastName[${i}]`) !== null &&
-      localStorage.getItem(`picture[${i}]`) !== null
-    ) {
+    if (localStorage.getItem(`firstName[${i}]`) !== null && localStorage.getItem(`lastName[${i}]`) !== null && localStorage.getItem(`picture[${i}]`) !== null) {
       let divFirstName = blockFetch[i].querySelector(".name_author");
       let divPhoto = blockFetch[i].querySelector(".avatar_author");
-      divFirstName.innerHTML = `${localStorage.getItem(
-        `firstName[${i}]`
-      )} ${localStorage.getItem(`lastName[${i}]`)}`;
-      divPhoto.innerHTML = `<img src="${localStorage.getItem(
-        `picture[${i}]`
-      )}">`;
+      divFirstName.innerHTML = `${localStorage.getItem(`firstName[${i}]`)} ${localStorage.getItem(`lastName[${i}]`)}`;
+      divPhoto.innerHTML = `<img src="${localStorage.getItem(`picture[${i}]`)}">`;
     } else {
       fetch("https://randomuser.me/api/")
         .then((res) => res.json())
@@ -168,10 +163,7 @@ function sortCount() {
 
   sortCountLikes.addEventListener("click", function () {
     sortName.innerHTML = sortCountLikes.querySelector("p").textContent;
-    localStorage.setItem(
-      "sortName",
-      sortCountLikes.querySelector("p").textContent
-    );
+    localStorage.setItem("sortName", sortCountLikes.querySelector("p").textContent);
     sortComments();
   });
 
@@ -182,38 +174,23 @@ function sortCount() {
 
   sortCountAnswers.addEventListener("click", function () {
     sortName.innerHTML = sortCountAnswers.querySelector("p").textContent;
-    localStorage.setItem(
-      "sortName",
-      sortCountAnswers.querySelector("p").textContent
-    );
+    localStorage.setItem("sortName", sortCountAnswers.querySelector("p").textContent);
   });
 }
 
 function sortDateComments() {
   let allComments = document.querySelector(".allcomments");
   let arrAllComments = Array.from(allComments.children);
-  let sortArrAllComments = arrAllComments.sort(
-    (a, b) =>
-      new Date(b.querySelector(".date_and_time").textContent) -
-      new Date(a.querySelector(".date_and_time").textContent)
-  );
-  sortArrAllComments.forEach((el) =>
-    document.querySelector(".allcomments").appendChild(el)
-  );
+  let sortArrAllComments = arrAllComments.sort((a, b) => new Date(b.querySelector(".date_and_time").textContent) - new Date(a.querySelector(".date_and_time").textContent));
+  sortArrAllComments.forEach((el) => document.querySelector(".allcomments").appendChild(el));
 }
 
 function sortComments() {
   let allComments = document.querySelector(".allcomments");
   let arrAllComments = Array.from(allComments.children);
-  let sortArrAllComments = arrAllComments.sort(
-    (a, b) =>
-      b.querySelector(".number_likes").textContent -
-      a.querySelector(".number_likes").textContent
-  );
+  let sortArrAllComments = arrAllComments.sort((a, b) => b.querySelector(".number_likes").textContent - a.querySelector(".number_likes").textContent);
 
-  sortArrAllComments.forEach((el) =>
-    document.querySelector(".allcomments").appendChild(el)
-  );
+  sortArrAllComments.forEach((el) => document.querySelector(".allcomments").appendChild(el));
 }
 
 function sendComment() {
@@ -264,6 +241,8 @@ function sendComment() {
     //отправка комментария
     let newComment = document.createElement("div");
     newComment.className = "comment_people author_comments";
+    newComment.setAttribute("data-index", document.querySelectorAll(".comment_people").length);
+
     let authorAndMessage = document.createElement("div");
     authorAndMessage.className = "author_and_message";
 
@@ -276,27 +255,18 @@ function sendComment() {
     let cloneAuthorName = authorName.cloneNode(true);
     let timeComment = document.createElement("div");
     timeComment.className = "date_and_time";
-    timeComment.innerText = `${padTo2Digits(nowTime.getDate())}.${padTo2Digits(
-      nowTime.getMonth() + 1
-    )} ${padTo2Digits(nowTime.getHours())}:${padTo2Digits(
-      nowTime.getMinutes()
-    )}`;
-    localStorage.setItem(
-      `dateAuthorComment${indexAuthorComment}`,
-      timeComment.textContent
-    );
+    timeComment.innerText = `${padTo2Digits(nowTime.getDate())}.${padTo2Digits(nowTime.getMonth() + 1)} ${padTo2Digits(nowTime.getHours())}:${padTo2Digits(nowTime.getMinutes())}`;
+    localStorage.setItem(`dateAuthorComment${indexAuthorComment}`, timeComment.textContent);
     let commentText = document.createElement("div");
     commentText.className = "comment_text";
     commentText.innerText = `${textArea.value}`;
-    localStorage.setItem(
-      `authorComment${indexAuthorComment}`,
-      commentText.textContent
-    );
+    localStorage.setItem(`authorComment${indexAuthorComment}`, commentText.textContent);
 
     let underText = document.createElement("div");
     underText.className = "under_text";
-    underText.innerHTML =
-      '<div class="button_answer"><img src="images/otvet.svg" alt="otvet" /><p>Ответить</p></div><div class="button_favorites"><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button class="button_minus">-</button><p class="number_likes">0</p><button class="button_plus">+</button></div>';
+    likeRandom = random(0, 10);
+    underText.innerHTML = `<div class="button_answer"><img src="images/otvet.svg" alt="otvet" /><p>Ответить</p></div><div class="button_favorites"><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button class="button_minus">-</button><p class="number_likes">${likeRandom}</p><button class="button_plus">+</button></div>`;
+    localStorage.setItem(`like${newComment.getAttribute("data-index")}`, likeRandom);
     authorAndText.appendChild(cloneAuthorName);
     authorAndText.appendChild(timeComment);
     authorAndMessage.appendChild(cloneAuthorAvatar);
@@ -322,31 +292,25 @@ function sendComment() {
 
 function getComments() {
   let i = 0;
-  while (
-    localStorage.getItem(`dateAuthorComment${i}`) !== null &&
-    localStorage.getItem(`authorComment${i}`) !== null
-  ) {
+  while (localStorage.getItem(`dateAuthorComment${i}`) !== null && localStorage.getItem(`authorComment${i}`) !== null) {
     let allComments = document.querySelector(".allcomments");
     let newComment = document.createElement("div");
     newComment.className = "comment_people author_comments";
+    newComment.setAttribute("data-index", document.querySelectorAll(".comment_people").length);
 
     let authorAndMessage = document.createElement("div");
     authorAndMessage.className = "author_and_message";
 
     let avatarAuthor = document.createElement("div");
     avatarAuthor.className = "avatar_author";
-    avatarAuthor.innerHTML = `<img src="${localStorage.getItem(
-      `picture[0]`
-    )}">`;
+    avatarAuthor.innerHTML = `<img src="${localStorage.getItem(`picture[0]`)}">`;
 
     let authorAndText = document.createElement("div");
     authorAndText.className = "author_and_text";
 
     let nameAuthor = document.createElement("div");
     nameAuthor.className = "name_author";
-    nameAuthor.innerHTML = `${localStorage.getItem(
-      `firstName[0]`
-    )} ${localStorage.getItem(`lastName[0]`)}`;
+    nameAuthor.innerHTML = `${localStorage.getItem(`firstName[0]`)} ${localStorage.getItem(`lastName[0]`)}`;
 
     let timeComment = document.createElement("div");
     timeComment.className = "date_and_time";
@@ -356,18 +320,20 @@ function getComments() {
     commentText.className = "comment_text";
     commentText.innerText = `${localStorage.getItem(`authorComment${i}`)}`;
 
-    if (localStorage.getItem(`like${i}`) !== null) {
-      likeAuthorRandom = `${localStorage.getItem(`likeAuthor${i}`)}`;
+    if (localStorage.getItem(`newLike${newComment.getAttribute("data-index")}`) !== null) {
+      likeRandom = localStorage.getItem(`newLike${newComment.getAttribute("data-index")}`);
     } else {
-      likeAuthorRandom = random(0, 10);
-      localStorage.setItem(`likeAuthor${i}`, likeAuthorRandom);
+      if (localStorage.getItem(`like${newComment.getAttribute("data-index")}`) !== null) {
+        likeRandom = `${localStorage.getItem(`like${newComment.getAttribute("data-index")}`)}`;
+      } else {
+        likeRandom = random(0, 10);
+        localStorage.setItem(`like${newComment.getAttribute("data-index")}`, likeRandom);
+      }
     }
-
-    console.log(likeAuthorRandom);
 
     let underText = document.createElement("div");
     underText.className = "under_text";
-    underText.innerHTML = `<div class="button_answer"><img src="images/otvet.svg" alt="otvet" /><p>Ответить</p></div><div class="button_favorites"><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button class="button_minus">-</button><p class="number_likes">${likeAuthorRandom}</p><button class="button_plus">+</button></div>`;
+    underText.innerHTML = `<div class="button_answer"><img src="images/otvet.svg" alt="otvet" /><p>Ответить</p></div><div class="button_favorites"><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button class="button_minus">-</button><p class="number_likes">${likeRandom}</p><button class="button_plus">+</button></div>`;
 
     allComments.insertBefore(newComment, allComments.firstChild)[i];
     newComment.appendChild(authorAndMessage)[i];
@@ -378,6 +344,27 @@ function getComments() {
     authorAndMessage.appendChild(commentText)[i];
     authorAndMessage.appendChild(underText)[i];
 
+    if (localStorage.getItem(`newLike${newComment.getAttribute("data-index")}`) !== null && localStorage.getItem(`newLike${newComment.getAttribute("data-index")}`) <= localStorage.getItem(`like${newComment.getAttribute("data-index")}`) - 1) {
+      authorAndMessage.querySelector(".button_minus").setAttribute("disabled", "");
+      authorAndMessage.querySelector(".button_minus").style = "color: black; opacity: 0.4;";
+    } else {
+      authorAndMessage.querySelector(".button_minus").removeAttribute("disabled");
+      authorAndMessage.querySelector(".button_minus").removeAttribute("style");
+    }
+    if (localStorage.getItem(`newLike${newComment.getAttribute("data-index")}`) !== null && localStorage.getItem(`newLike${newComment.getAttribute("data-index")}`) >= localStorage.getItem(`like${newComment.getAttribute("data-index")}`) + 1) {
+      authorAndMessage.querySelector(".button_plus").setAttribute("disabled", "");
+      authorAndMessage.querySelector(".button_plus").style = "color: black; opacity: 0.4;";
+    } else {
+      authorAndMessage.querySelector(".button_plus").removeAttribute("disabled");
+      authorAndMessage.querySelector(".button_plus").removeAttribute("style");
+    }
+
+    if (authorAndMessage.querySelector(".number_likes").textContent < 0) {
+      authorAndMessage.querySelector(".number_likes").style = "color: red";
+    } else {
+      authorAndMessage.querySelector(".number_likes").removeAttribute("style");
+    }
+
     i++;
   }
 }
@@ -387,11 +374,7 @@ function getAnswers() {
 
   for (let i = 0; i <= localStorage.getItem("indexAuthorAnswer"); i++) {
     for (let k = 0; k <= localStorage.getItem("indexAuthorAnswer"); k++) {
-      if (
-        localStorage.getItem(`dateAnswer${i}.index${k}`) !== null &&
-        localStorage.getItem(`authorAnswer${i}.index${k}`) !== null &&
-        localStorage.getItem(`idAnswerParent${i}.index${k}`) !== null
-      ) {
+      if (localStorage.getItem(`dateAnswer${i}.index${k}`) !== null && localStorage.getItem(`authorAnswer${i}.index${k}`) !== null && localStorage.getItem(`idAnswerParent${i}.index${k}`) !== null) {
         let answer = document.createElement("div");
         answer.className = "answer";
         let authorAndMessage = document.createElement("div");
@@ -405,19 +388,26 @@ function getAnswers() {
         let timeComment = document.createElement("div");
         var nowTime = new Date();
         timeComment.className = "date_and_time";
-        timeComment.innerText = `${localStorage.getItem(
-          `dateAnswer${i}.index${k}`
-        )}`;
+        timeComment.innerText = `${localStorage.getItem(`dateAnswer${i}.index${k}`)}`;
 
         let commentText = document.createElement("div");
         commentText.className = "comment_text";
-        commentText.innerText = `${localStorage.getItem(
-          `authorAnswer${i}.index${k}`
-        )}`;
+        commentText.innerText = `${localStorage.getItem(`authorAnswer${i}.index${k}`)}`;
         let underText = document.createElement("div");
         underText.className = "under_text under_text_answer";
-        underText.innerHTML =
-          '<div class="button_favorites"><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button>-</button><p>3</p><button>+</button></div>';
+
+        console.log(i, k);
+
+        if (localStorage.getItem(`newLikeAnswer${i}.index${k}`) !== null) {
+          likeRandom = localStorage.getItem(`newLikeAnswer${i}.index${k}`);
+          console.log(`newLikeAnswer${i}.index${k}`, likeRandom);
+        } else {
+          if (localStorage.getItem(`likeAnswer${i}.index${k}`) !== null) {
+            likeRandom = localStorage.getItem(`likeAnswer${i}.index${k}`);
+          }
+        }
+
+        underText.innerHTML = `<div class="button_favorites"><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button class="button_minus">-</button><p class="number_likes">${likeRandom}</p><button class="button_plus">+</button></div>`;
 
         authorAndText.appendChild(cloneAuthorName);
         authorAndText.appendChild(timeComment);
@@ -427,11 +417,28 @@ function getAnswers() {
         authorAndMessage.appendChild(avatarAuthor);
         answer.appendChild(authorAndMessage);
 
-        messages[
-          messages.length -
-            localStorage.getItem(`idAnswerParent${i}.index${k}`) -
-            1
-        ].appendChild(answer);
+        if (localStorage.getItem(`newLikeAnswer${i}.index${k}`) !== null && localStorage.getItem(`newLikeAnswer${i}.index${k}`) <= localStorage.getItem(`likeAnswer${i}.index${k}`) - 1) {
+          authorAndMessage.querySelector(".button_minus").setAttribute("disabled", "");
+          authorAndMessage.querySelector(".button_minus").style = "color: black; opacity: 0.4;";
+        } else {
+          authorAndMessage.querySelector(".button_minus").removeAttribute("disabled");
+          authorAndMessage.querySelector(".button_minus").removeAttribute("style");
+        }
+        if (localStorage.getItem(`newLikeAnswer${i}.index${k}`) !== null && localStorage.getItem(`newLikeAnswer${i}.index${k}`) >= localStorage.getItem(`likeAnswer${i}.index${k}`) + 1) {
+          authorAndMessage.querySelector(".button_plus").setAttribute("disabled", "");
+          authorAndMessage.querySelector(".button_plus").style = "color: black; opacity: 0.4;";
+        } else {
+          authorAndMessage.querySelector(".button_plus").removeAttribute("disabled");
+          authorAndMessage.querySelector(".button_plus").removeAttribute("style");
+        }
+
+        if (authorAndMessage.querySelector(".number_likes").textContent < 0) {
+          authorAndMessage.querySelector(".number_likes").style = "color: red";
+        } else {
+          authorAndMessage.querySelector(".number_likes").removeAttribute("style");
+        }
+
+        messages[messages.length - localStorage.getItem(`idAnswerParent${i}.index${k}`) - 1].appendChild(answer);
       }
     }
   }
@@ -449,9 +456,7 @@ document.addEventListener("click", (event) => {
       }
     });
 
-    const index = event.target
-      .closest(".button_answer")
-      .getAttribute("data-index");
+    const index = event.target.closest(".button_answer").getAttribute("data-index");
     let formSend = document.querySelector(".comment_author");
     let cloneFormSend = formSend.cloneNode(true);
     cloneFormSend.className += " copy_form_answer";
@@ -463,24 +468,15 @@ document.addEventListener("click", (event) => {
 });
 
 function sendAnswer(messageAtributeIndex) {
-  document.getElementById("form_answer").style =
-    "display: grid padding-left: 91px";
+  document.getElementById("form_answer").style = "display: grid padding-left: 91px";
   document.getElementById("form_answer").style = "padding-left: 91px";
 
   let messages = document.querySelectorAll(".comment_people");
 
-  let buttonSendAnswer = document
-    .querySelector("#form_answer")
-    .querySelector(".send");
-  let textAreaAnswer = document
-    .querySelector("#form_answer")
-    .querySelector(".message");
-  let maxTextAnswer = document
-    .querySelector("#form_answer")
-    .querySelector(".max_text");
-  let warningTextAnswer = document
-    .querySelector("#form_answer")
-    .querySelector(".warning_text");
+  let buttonSendAnswer = document.querySelector("#form_answer").querySelector(".send");
+  let textAreaAnswer = document.querySelector("#form_answer").querySelector(".message");
+  let maxTextAnswer = document.querySelector("#form_answer").querySelector(".max_text");
+  let warningTextAnswer = document.querySelector("#form_answer").querySelector(".warning_text");
 
   if (localStorage.getItem("indexAuthorAnswer") !== null) {
     indexAuthorAnswer = localStorage.getItem("indexAuthorAnswer");
@@ -523,6 +519,8 @@ function sendAnswer(messageAtributeIndex) {
   buttonSendAnswer.addEventListener("click", function () {
     let answer = document.createElement("div");
     answer.className = "answer";
+    // answer.setAttribute("data-index", answer.closest('.comment_people').length);
+
     let authorAndMessage = document.createElement("div");
     authorAndMessage.className = "author_and_message";
     let avatarAuthor = document.getElementById("avatar").cloneNode(true);
@@ -534,19 +532,17 @@ function sendAnswer(messageAtributeIndex) {
     let timeComment = document.createElement("div");
     var nowTime = new Date();
     timeComment.className = "date_and_time";
-    timeComment.innerText = `${padTo2Digits(nowTime.getDate())}.${padTo2Digits(
-      nowTime.getMonth() + 1
-    )} ${padTo2Digits(nowTime.getHours())}:${padTo2Digits(
-      nowTime.getMinutes()
-    )}`;
+    timeComment.innerText = `${padTo2Digits(nowTime.getDate())}.${padTo2Digits(nowTime.getMonth() + 1)} ${padTo2Digits(nowTime.getHours())}:${padTo2Digits(nowTime.getMinutes())}`;
 
     let commentText = document.createElement("div");
     commentText.className = "comment_text";
     commentText.innerText = `${textAreaAnswer.value}`;
     let underText = document.createElement("div");
     underText.className = "under_text under_text_answer";
-    underText.innerHTML =
-      '<div class="button_favorites"><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button>-</button><p>3</p><button>+</button></div>';
+
+    likeRandom = random(0, 10);
+
+    underText.innerHTML = `<div class="button_favorites"><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button class="button_minus">-</button><p class="number_likes">${likeRandom}</p><button class="button_plus">+</button></div>`;
 
     authorAndText.appendChild(cloneAuthorName);
     authorAndText.appendChild(timeComment);
@@ -558,6 +554,8 @@ function sendAnswer(messageAtributeIndex) {
 
     messages[messageAtributeIndex].appendChild(answer);
 
+    answer.setAttribute("data-index", answer.closest(".comment_people").querySelectorAll(".answer").length - 1);
+
     textAreaAnswer.value = "";
     textAreaAnswer.style.height = "43.531px";
     buttonSendAnswer.setAttribute("disabled", "");
@@ -567,27 +565,13 @@ function sendAnswer(messageAtributeIndex) {
 
     document.getElementById("form_answer").remove();
 
-    localStorage.setItem(
-      `idAnswerParent${answer
-        .closest(".comment_people")
-        .getAttribute("data-index")}.index${indexAuthorAnswer}`,
-      answer.closest(".comment_people").getAttribute("data-index")
-    );
-    localStorage.setItem(
-      `dateAnswer${answer
-        .closest(".comment_people")
-        .getAttribute("data-index")}.index${indexAuthorAnswer}`,
-      timeComment.textContent
-    );
-    localStorage.setItem(
-      `authorAnswer${answer
-        .closest(".comment_people")
-        .getAttribute("data-index")}.index${indexAuthorAnswer}`,
-      commentText.textContent
-    );
-
+    localStorage.setItem(`likeAnswer${answer.closest(".comment_people").getAttribute("data-index")}.index${answer.getAttribute("data-index")}`, likeRandom);
+    localStorage.setItem(`idAnswerParent${answer.closest(".comment_people").getAttribute("data-index")}.index${indexAuthorAnswer}`, answer.closest(".comment_people").getAttribute("data-index"));
+    localStorage.setItem(`dateAnswer${answer.closest(".comment_people").getAttribute("data-index")}.index${indexAuthorAnswer}`, timeComment.textContent);
+    localStorage.setItem(`authorAnswer${answer.closest(".comment_people").getAttribute("data-index")}.index${indexAuthorAnswer}`, commentText.textContent);
     indexAuthorAnswer++;
     localStorage.setItem("indexAuthorAnswer", indexAuthorAnswer);
+    plusMinusButtonsAnswer();
     answerCount();
   });
 }
@@ -600,65 +584,29 @@ document.addEventListener("click", (event) => {
     let id = event.target.closest(".comment_people").getAttribute("data-index");
 
     if (event.target.closest(".answer") !== null) {
-      if (
-        buttonFavorites.hasAttribute(
-          `active-favorites${id}.${buttonFavorites
-            .closest(".answer")
-            .getAttribute("data-index")}`
-        )
-      ) {
-        localStorage.removeItem(
-          `active-favorites${id}.${buttonFavorites
-            .closest(".answer")
-            .getAttribute("data-index")}`
-        );
-        buttonFavorites.removeAttribute(
-          `active-favorites${id}.${buttonFavorites
-            .closest(".answer")
-            .getAttribute("data-index")}`
-        );
+      if (buttonFavorites.hasAttribute(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`)) {
+        localStorage.removeItem(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`);
+        buttonFavorites.removeAttribute(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`);
         buttonFavorites.style = "color: black";
-        buttonFavorites.innerHTML =
-          '<img src="images/izbran.svg" alt="izbran" /><p>В избранное</p>';
+        buttonFavorites.innerHTML = '<img src="images/izbran.svg" alt="izbran" /><p>В избранное</p>';
       } else {
         buttonFavorites.style = "color: red";
         buttonFavorites.innerHTML = "<p>В избранном</p>";
-        buttonFavorites.setAttribute(
-          `active-favorites${id}.${buttonFavorites
-            .closest(".answer")
-            .getAttribute("data-index")}`,
-          true
-        );
-        localStorage.setItem(
-          `active-favorites${id}.${buttonFavorites
-            .closest(".answer")
-            .getAttribute("data-index")}`,
-          buttonFavorites.getAttribute(
-            `active-favorites${id}.${buttonFavorites
-              .closest(".answer")
-              .getAttribute("data-index")}`
-          )
-        );
+        buttonFavorites.setAttribute(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`, true);
+        localStorage.setItem(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`, buttonFavorites.getAttribute(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`));
       }
     } else {
-      if (
-        buttonFavorites.hasAttribute(`active-favorites${id}`) &&
-        localStorage.getItem(`active-favorites${id}`) !== null
-      ) {
+      if (buttonFavorites.hasAttribute(`active-favorites${id}`) && localStorage.getItem(`active-favorites${id}`) !== null) {
         buttonFavorites.removeAttribute(`active-favorites${id}`);
         localStorage.removeItem(`active-favorites${id}`);
         buttonFavorites.style = "color: black";
-        buttonFavorites.innerHTML =
-          '<img src="images/izbran.svg" alt="izbran" /><p>В избранное</p>';
+        buttonFavorites.innerHTML = '<img src="images/izbran.svg" alt="izbran" /><p>В избранное</p>';
       } else {
         buttonFavorites.style = "color: red";
         buttonFavorites.innerHTML = "<p>В избранном</p>";
 
         buttonFavorites.setAttribute(`active-favorites${id}`, true);
-        localStorage.setItem(
-          `active-favorites${id}`,
-          buttonFavorites.getAttribute(`active-favorites${id}`)
-        );
+        localStorage.setItem(`active-favorites${id}`, buttonFavorites.getAttribute(`active-favorites${id}`));
       }
     }
   }
@@ -670,36 +618,14 @@ function getFavorites() {
   buttonFavorites.forEach(function (btn, index) {
     let id = btn.closest(".comment_people").getAttribute("data-index");
 
-    if (
-      localStorage.getItem(`active-favorites${id}`) !== null &&
-      btn.closest(".answer") === null
-    ) {
-      btn.setAttribute(
-        `active-favorites${id}`,
-        localStorage.getItem(`active-favorites${id}`)
-      );
+    if (localStorage.getItem(`active-favorites${id}`) !== null && btn.closest(".answer") === null) {
+      btn.setAttribute(`active-favorites${id}`, localStorage.getItem(`active-favorites${id}`));
       btn.style = "color: red";
       btn.innerHTML = "<p>В избранном</p>";
     }
 
-    if (
-      btn.closest(".answer") !== null &&
-      localStorage.getItem(
-        `active-favorites${id}.${btn
-          .closest(".answer")
-          .getAttribute("data-index")}`
-      ) !== null
-    ) {
-      btn.setAttribute(
-        `active-favorites${id}.${btn
-          .closest(".answer")
-          .getAttribute("data-index")}`,
-        localStorage.getItem(
-          `active-favorites${id}.${btn
-            .closest(".answer")
-            .getAttribute("data-index")}`
-        )
-      );
+    if (btn.closest(".answer") !== null && localStorage.getItem(`active-favorites${id}.${btn.closest(".answer").getAttribute("data-index")}`) !== null) {
+      btn.setAttribute(`active-favorites${id}.${btn.closest(".answer").getAttribute("data-index")}`, localStorage.getItem(`active-favorites${id}.${btn.closest(".answer").getAttribute("data-index")}`));
       btn.style = "color: red";
       btn.innerHTML = "<p>В избранном</p>";
     }
@@ -731,6 +657,53 @@ function sortFavorites() {
   });
 }
 
+function plusMinusButtonsAnswer() {
+  let messages = document.querySelectorAll(".comment_people ");
+  messages.forEach(function (mess, index) {
+    let answer = mess.querySelectorAll(".answer");
+    answer.forEach(function (ans) {
+      let btnMinus = ans.querySelector(".button_minus");
+      let btnPlus = ans.querySelector(".button_plus");
+      let numberLikes = +ans.querySelector(".number_likes").textContent;
+      let newNumberLikes = numberLikes;
+
+      btnMinus.addEventListener("click", function () {
+        newNumberLikes--;
+        getNumberAnswer(newNumberLikes);
+      });
+
+      btnPlus.addEventListener("click", function () {
+        newNumberLikes++;
+        getNumberAnswer(newNumberLikes);
+      });
+
+      function getNumberAnswer(num) {
+        localStorage.setItem(`newLikeAnswer${ans.closest(".comment_people").getAttribute("data-index")}.index${ans.closest(".answer").getAttribute("data-index")}`, num);
+        ans.querySelector(".number_likes").innerText = +num;
+        if (num <= +localStorage.getItem(`likeAnswer${ans.closest(".comment_people").getAttribute("data-index")}.index${ans.closest(".answer").getAttribute("data-index")}`) - 1) {
+          btnMinus.setAttribute("disabled", "");
+          btnMinus.style = "color: black; opacity: 0.4;";
+        } else {
+          btnMinus.removeAttribute("disabled");
+          btnMinus.removeAttribute("style");
+        }
+        if (num >= +localStorage.getItem(`likeAnswer${ans.closest(".comment_people").getAttribute("data-index")}.index${ans.closest(".answer").getAttribute("data-index")}`) + 1) {
+          btnPlus.setAttribute("disabled", "");
+          btnPlus.style = "color: black; opacity: 0.4;";
+        } else {
+          btnPlus.removeAttribute("disabled");
+          btnPlus.removeAttribute("style");
+        }
+        if (num < 0) {
+          ans.querySelector(".number_likes").style = "color: red";
+        } else {
+          ans.querySelector(".number_likes").removeAttribute("style");
+        }
+      }
+    });
+  });
+}
+
 function plusMinusButtons() {
   let messages = document.querySelectorAll(".comment_people ");
   messages.forEach(function (mess, index) {
@@ -742,37 +715,25 @@ function plusMinusButtons() {
     btnMinus.addEventListener("click", function () {
       newNumberLikes--;
       getNumber(newNumberLikes);
-      // if (btnMinus.closest(".blockFetch")) {
-      //   let blockFetch = document.querySelectorAll(".blockFetch");
-      //   blockFetch.forEach(function (mess, index) {
-      //     localStorage.setItem(`like${index}`, newNumberLikes);
-      //   });
-      // }
     });
 
     btnPlus.addEventListener("click", function () {
       newNumberLikes++;
       getNumber(newNumberLikes);
-      // if (btnPlus.closest(".blockFetch")) {
-      //   let blockFetch = document.querySelectorAll(".blockFetch");
-      //   blockFetch.forEach(function (mess, index) {
-      //     localStorage.setItem(`like${index}`, newNumberLikes);
-      //   });
-      // }
     });
 
     function getNumber(num) {
       console.log(num);
-      localStorage.setItem(`likeAuthor${index}`, num);
+      localStorage.setItem(`newLike${mess.getAttribute("data-index")}`, num);
       mess.querySelector(".number_likes").innerText = +num;
-      if (num <= numberLikes - 1) {
+      if (num <= +localStorage.getItem(`like${mess.getAttribute("data-index")}`) - 1) {
         btnMinus.setAttribute("disabled", "");
         btnMinus.style = "color: black; opacity: 0.4;";
       } else {
         btnMinus.removeAttribute("disabled");
         btnMinus.removeAttribute("style");
       }
-      if (num >= numberLikes + 1) {
+      if (num >= +localStorage.getItem(`like${mess.getAttribute("data-index")}`) + 1) {
         btnPlus.setAttribute("disabled", "");
         btnPlus.style = "color: black; opacity: 0.4;";
       } else {
@@ -811,4 +772,5 @@ function mainStart() {
   sendComment();
   sortFavorites();
   plusMinusButtons();
+  plusMinusButtonsAnswer();
 }
