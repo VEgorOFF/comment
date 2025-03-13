@@ -5,10 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Yeseva+One&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" media="screen and (min-width: 321px)" href="style\style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Yeseva+One&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      media="screen and (min-width: 321px)"
+      href="style\style.css"
+    />
 
-    <link rel="stylesheet" media="screen and (max-width: 320px)" href="style\styleMobile.css" />
+    <link
+      rel="stylesheet"
+      media="screen and (max-width: 320px)"
+      href="style\styleMobile.css"
+    />
     <title>Comment</title>
   </head>
 
@@ -40,7 +51,7 @@
             <div class="sort_count">
               <div class="sort_name">
                 <p>По количеству оценок</p>
-                <img src="images\Arrow 1.svg" alt="strela" />
+                <img id="arrow" src="images\Arrow 1.svg" alt="arrow" />
               </div>
               <div class="sort_btn">
                 <div id="date">
@@ -77,11 +88,17 @@
             <div class="form_send">
               <form id="send_comment">
                 <label>
-                  <textarea class="message" type="text" placeholder="Введите текст..."></textarea>
+                  <textarea
+                    class="message"
+                    type="text"
+                    placeholder="Введите текст..."
+                  ></textarea>
                 </label>
               </form>
             </div>
-            <button class="send" type="button" form="send_comment" disabled>Отправить</button>
+            <button class="send" type="button" form="send_comment" disabled>
+              Отправить
+            </button>
           </div>
 
           <div class="allcomments"></div>
