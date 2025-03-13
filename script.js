@@ -28,29 +28,14 @@ function getStartComments() {
       localStorage.setItem(`text${i}`, commentText.textContent);
     }
 
-    if (
-      localStorage.getItem(
-        `newLike${divCommentPeople.getAttribute("data-index")}`
-      ) !== null
-    ) {
-      likeRandom = `${localStorage.getItem(
-        `newLike${divCommentPeople.getAttribute("data-index")}`
-      )}`;
+    if (localStorage.getItem(`newLike${divCommentPeople.getAttribute("data-index")}`) !== null) {
+      likeRandom = `${localStorage.getItem(`newLike${divCommentPeople.getAttribute("data-index")}`)}`;
     } else {
-      if (
-        localStorage.getItem(
-          `like${divCommentPeople.getAttribute("data-index")}`
-        ) !== null
-      ) {
-        likeRandom = `${localStorage.getItem(
-          `like${divCommentPeople.getAttribute("data-index")}`
-        )}`;
+      if (localStorage.getItem(`like${divCommentPeople.getAttribute("data-index")}`) !== null) {
+        likeRandom = `${localStorage.getItem(`like${divCommentPeople.getAttribute("data-index")}`)}`;
       } else {
         likeRandom = random(0, 10);
-        localStorage.setItem(
-          `like${divCommentPeople.getAttribute("data-index")}`,
-          likeRandom
-        );
+        localStorage.setItem(`like${divCommentPeople.getAttribute("data-index")}`, likeRandom);
       }
     }
 
@@ -72,60 +57,24 @@ function getStartComments() {
     if (localStorage.getItem(`date${i}`) !== null) {
       dateAndTime.innerText = `${localStorage.getItem(`date${i}`)}`;
     } else {
-      dateAndTime.innerText = `${padTo2Digits(
-        nowTime.getDate()
-      )}.${padTo2Digits(nowTime.getMonth() + 1)} ${padTo2Digits(
-        nowTime.getHours()
-      )}:${padTo2Digits(nowTime.getMinutes())}`;
+      dateAndTime.innerText = `${padTo2Digits(nowTime.getDate())}.${padTo2Digits(nowTime.getMonth() + 1)} ${padTo2Digits(nowTime.getHours())}:${padTo2Digits(nowTime.getMinutes())}`;
       localStorage.setItem(`date${i}`, dateAndTime.textContent);
     }
     authorAndText.appendChild(nameAuthor);
     authorAndText.appendChild(dateAndTime);
 
-    if (
-      localStorage.getItem(
-        `newLike${divCommentPeople.getAttribute("data-index")}`
-      ) !== null &&
-      localStorage.getItem(
-        `newLike${divCommentPeople.getAttribute("data-index")}`
-      ) <=
-        localStorage.getItem(
-          `like${divCommentPeople.getAttribute("data-index")}`
-        ) -
-          1
-    ) {
-      authorAndMessage
-        .querySelector(".button_minus")
-        .setAttribute("disabled", "");
-      authorAndMessage.querySelector(".button_minus").style =
-        "color: black; opacity: 0.4;";
+    if (localStorage.getItem(`newLike${divCommentPeople.getAttribute("data-index")}`) !== null && localStorage.getItem(`newLike${divCommentPeople.getAttribute("data-index")}`) <= localStorage.getItem(`like${divCommentPeople.getAttribute("data-index")}`) - 1) {
+      authorAndMessage.querySelector(".button_minus").setAttribute("disabled", "");
+      authorAndMessage.querySelector(".button_minus").style = "color: black; opacity: 0.4;";
     } else {
-      authorAndMessage
-        .querySelector(".button_minus")
-        .removeAttribute("disabled");
+      authorAndMessage.querySelector(".button_minus").removeAttribute("disabled");
       authorAndMessage.querySelector(".button_minus").removeAttribute("style");
     }
-    if (
-      localStorage.getItem(
-        `newLike${divCommentPeople.getAttribute("data-index")}`
-      ) !== null &&
-      localStorage.getItem(
-        `newLike${divCommentPeople.getAttribute("data-index")}`
-      ) >=
-        localStorage.getItem(
-          `like${divCommentPeople.getAttribute("data-index")}`
-        ) +
-          1
-    ) {
-      authorAndMessage
-        .querySelector(".button_plus")
-        .setAttribute("disabled", "");
-      authorAndMessage.querySelector(".button_plus").style =
-        "color: black; opacity: 0.4;";
+    if (localStorage.getItem(`newLike${divCommentPeople.getAttribute("data-index")}`) !== null && localStorage.getItem(`newLike${divCommentPeople.getAttribute("data-index")}`) >= localStorage.getItem(`like${divCommentPeople.getAttribute("data-index")}`) + 1) {
+      authorAndMessage.querySelector(".button_plus").setAttribute("disabled", "");
+      authorAndMessage.querySelector(".button_plus").style = "color: black; opacity: 0.4;";
     } else {
-      authorAndMessage
-        .querySelector(".button_plus")
-        .removeAttribute("disabled");
+      authorAndMessage.querySelector(".button_plus").removeAttribute("disabled");
       authorAndMessage.querySelector(".button_plus").removeAttribute("style");
     }
 
@@ -141,19 +90,11 @@ function getApi() {
   let blockFetch = document.querySelectorAll(".blockFetch");
 
   for (let i = 0; i < blockFetch.length; i++) {
-    if (
-      localStorage.getItem(`firstName[${i}]`) !== null &&
-      localStorage.getItem(`lastName[${i}]`) !== null &&
-      localStorage.getItem(`picture[${i}]`) !== null
-    ) {
+    if (localStorage.getItem(`firstName[${i}]`) !== null && localStorage.getItem(`lastName[${i}]`) !== null && localStorage.getItem(`picture[${i}]`) !== null) {
       let divFirstName = blockFetch[i].querySelector(".name_author");
       let divPhoto = blockFetch[i].querySelector(".avatar_author");
-      divFirstName.innerHTML = `${localStorage.getItem(
-        `firstName[${i}]`
-      )} ${localStorage.getItem(`lastName[${i}]`)}`;
-      divPhoto.innerHTML = `<img src="${localStorage.getItem(
-        `picture[${i}]`
-      )}">`;
+      divFirstName.innerHTML = `${localStorage.getItem(`firstName[${i}]`)} ${localStorage.getItem(`lastName[${i}]`)}`;
+      divPhoto.innerHTML = `<img src="${localStorage.getItem(`picture[${i}]`)}">`;
     } else {
       fetch("https://randomuser.me/api/")
         .then((res) => res.json())
@@ -208,38 +149,27 @@ function sortCount() {
   let sortActual = document.getElementById("actual");
   let sortCountAnswers = document.getElementById("count_answers");
 
-  if (localStorage.getItem("sortName") !== null) {
-    sortName.innerHTML = localStorage.getItem("sortName");
-  } else {
-    sortName.innerHTML = sortActual.querySelector("p").textContent;
-  }
+  sortName.innerHTML = sortActual.querySelector("p").textContent;
 
   sortDate.addEventListener("click", function () {
     sortName.innerHTML = sortDate.querySelector("p").textContent;
-    localStorage.setItem("sortName", sortDate.querySelector("p").textContent);
+
     sortDateComments();
   });
 
   sortCountLikes.addEventListener("click", function () {
     sortName.innerHTML = sortCountLikes.querySelector("p").textContent;
-    localStorage.setItem(
-      "sortName",
-      sortCountLikes.querySelector("p").textContent
-    );
+
     sortLikes();
   });
 
   sortActual.addEventListener("click", function () {
     sortName.innerHTML = sortActual.querySelector("p").textContent;
-    localStorage.setItem("sortName", sortActual.querySelector("p").textContent);
   });
 
   sortCountAnswers.addEventListener("click", function () {
     sortName.innerHTML = sortCountAnswers.querySelector("p").textContent;
-    localStorage.setItem(
-      "sortName",
-      sortCountAnswers.querySelector("p").textContent
-    );
+
     sortCountAnswer();
   });
 }
@@ -247,42 +177,24 @@ function sortCount() {
 function sortDateComments() {
   let allComments = document.querySelector(".allcomments");
   let arrAllComments = Array.from(allComments.children);
-  let sortArrAllComments = arrAllComments.sort(
-    (a, b) =>
-      new Date(b.querySelector(".date_and_time").textContent) -
-      new Date(a.querySelector(".date_and_time").textContent)
-  );
-  sortArrAllComments.forEach((el) =>
-    document.querySelector(".allcomments").appendChild(el)
-  );
+  let sortArrAllComments = arrAllComments.sort((a, b) => new Date(b.querySelector(".date_and_time").textContent) - new Date(a.querySelector(".date_and_time").textContent));
+  sortArrAllComments.forEach((el) => document.querySelector(".allcomments").appendChild(el));
 }
 
 function sortLikes() {
   let allComments = document.querySelector(".allcomments");
   let arrAllComments = Array.from(allComments.children);
-  let sortArrAllComments = arrAllComments.sort(
-    (a, b) =>
-      b.querySelector(".number_likes").textContent -
-      a.querySelector(".number_likes").textContent
-  );
+  let sortArrAllComments = arrAllComments.sort((a, b) => b.querySelector(".number_likes").textContent - a.querySelector(".number_likes").textContent);
 
-  sortArrAllComments.forEach((el) =>
-    document.querySelector(".allcomments").appendChild(el)
-  );
+  sortArrAllComments.forEach((el) => document.querySelector(".allcomments").appendChild(el));
 }
 
 function sortCountAnswer() {
   let allComments = document.querySelector(".allcomments");
   let arrAllComments = Array.from(allComments.children);
-  let sortArrAllComments = arrAllComments.sort(
-    (a, b) =>
-      b.querySelectorAll(".answer").length -
-      a.querySelectorAll(".answer").length
-  );
+  let sortArrAllComments = arrAllComments.sort((a, b) => b.querySelectorAll(".answer").length - a.querySelectorAll(".answer").length);
 
-  sortArrAllComments.forEach((el) =>
-    document.querySelector(".allcomments").appendChild(el)
-  );
+  sortArrAllComments.forEach((el) => document.querySelector(".allcomments").appendChild(el));
 }
 
 function sendComment() {
@@ -333,10 +245,7 @@ function sendComment() {
     //отправка комментария
     let newComment = document.createElement("div");
     newComment.className = "comment_people author_comments";
-    newComment.setAttribute(
-      "data-index",
-      document.querySelectorAll(".comment_people").length
-    );
+    newComment.setAttribute("data-index", document.querySelectorAll(".comment_people").length);
 
     let authorAndMessage = document.createElement("div");
     authorAndMessage.className = "author_and_message";
@@ -350,31 +259,18 @@ function sendComment() {
     let cloneAuthorName = authorName.cloneNode(true);
     let timeComment = document.createElement("div");
     timeComment.className = "date_and_time";
-    timeComment.innerText = `${padTo2Digits(nowTime.getDate())}.${padTo2Digits(
-      nowTime.getMonth() + 1
-    )} ${padTo2Digits(nowTime.getHours())}:${padTo2Digits(
-      nowTime.getMinutes()
-    )}`;
-    localStorage.setItem(
-      `dateAuthorComment${indexAuthorComment}`,
-      timeComment.textContent
-    );
+    timeComment.innerText = `${padTo2Digits(nowTime.getDate())}.${padTo2Digits(nowTime.getMonth() + 1)} ${padTo2Digits(nowTime.getHours())}:${padTo2Digits(nowTime.getMinutes())}`;
+    localStorage.setItem(`dateAuthorComment${indexAuthorComment}`, timeComment.textContent);
     let commentText = document.createElement("div");
     commentText.className = "comment_text";
     commentText.innerText = `${textArea.value}`;
-    localStorage.setItem(
-      `authorComment${indexAuthorComment}`,
-      commentText.textContent
-    );
+    localStorage.setItem(`authorComment${indexAuthorComment}`, commentText.textContent);
 
     let underText = document.createElement("div");
     underText.className = "under_text";
     likeRandom = random(0, 10);
     underText.innerHTML = `<div class="button_answer"><img src="images/otvet.svg" alt="otvet" /><p>Ответить</p></div><div class="button_favorites"><img src="images/izbran.svg" alt="izbran" /><p>В избранное</p></div><div><button class="button_minus">-</button><p class="number_likes">${likeRandom}</p><button class="button_plus">+</button></div>`;
-    localStorage.setItem(
-      `like${newComment.getAttribute("data-index")}`,
-      likeRandom
-    );
+    localStorage.setItem(`like${newComment.getAttribute("data-index")}`, likeRandom);
     authorAndText.appendChild(cloneAuthorName);
     authorAndText.appendChild(timeComment);
     authorAndMessage.appendChild(cloneAuthorAvatar);
@@ -401,35 +297,25 @@ function sendComment() {
 
 function getComments() {
   let i = 0;
-  while (
-    localStorage.getItem(`dateAuthorComment${i}`) !== null &&
-    localStorage.getItem(`authorComment${i}`) !== null
-  ) {
+  while (localStorage.getItem(`dateAuthorComment${i}`) !== null && localStorage.getItem(`authorComment${i}`) !== null) {
     let allComments = document.querySelector(".allcomments");
     let newComment = document.createElement("div");
     newComment.className = "comment_people author_comments";
-    newComment.setAttribute(
-      "data-index",
-      document.querySelectorAll(".comment_people").length
-    );
+    newComment.setAttribute("data-index", document.querySelectorAll(".comment_people").length);
 
     let authorAndMessage = document.createElement("div");
     authorAndMessage.className = "author_and_message";
 
     let avatarAuthor = document.createElement("div");
     avatarAuthor.className = "avatar_author";
-    avatarAuthor.innerHTML = `<img src="${localStorage.getItem(
-      `picture[0]`
-    )}">`;
+    avatarAuthor.innerHTML = `<img src="${localStorage.getItem(`picture[0]`)}">`;
 
     let authorAndText = document.createElement("div");
     authorAndText.className = "author_and_text";
 
     let nameAuthor = document.createElement("div");
     nameAuthor.className = "name_author";
-    nameAuthor.innerHTML = `${localStorage.getItem(
-      `firstName[0]`
-    )} ${localStorage.getItem(`lastName[0]`)}`;
+    nameAuthor.innerHTML = `${localStorage.getItem(`firstName[0]`)} ${localStorage.getItem(`lastName[0]`)}`;
 
     let timeComment = document.createElement("div");
     timeComment.className = "date_and_time";
@@ -439,28 +325,14 @@ function getComments() {
     commentText.className = "comment_text";
     commentText.innerText = `${localStorage.getItem(`authorComment${i}`)}`;
 
-    if (
-      localStorage.getItem(
-        `newLike${newComment.getAttribute("data-index")}`
-      ) !== null
-    ) {
-      likeRandom = localStorage.getItem(
-        `newLike${newComment.getAttribute("data-index")}`
-      );
+    if (localStorage.getItem(`newLike${newComment.getAttribute("data-index")}`) !== null) {
+      likeRandom = localStorage.getItem(`newLike${newComment.getAttribute("data-index")}`);
     } else {
-      if (
-        localStorage.getItem(`like${newComment.getAttribute("data-index")}`) !==
-        null
-      ) {
-        likeRandom = `${localStorage.getItem(
-          `like${newComment.getAttribute("data-index")}`
-        )}`;
+      if (localStorage.getItem(`like${newComment.getAttribute("data-index")}`) !== null) {
+        likeRandom = `${localStorage.getItem(`like${newComment.getAttribute("data-index")}`)}`;
       } else {
         likeRandom = random(0, 10);
-        localStorage.setItem(
-          `like${newComment.getAttribute("data-index")}`,
-          likeRandom
-        );
+        localStorage.setItem(`like${newComment.getAttribute("data-index")}`, likeRandom);
       }
     }
 
@@ -477,40 +349,18 @@ function getComments() {
     authorAndMessage.appendChild(commentText)[i];
     authorAndMessage.appendChild(underText)[i];
 
-    if (
-      localStorage.getItem(
-        `newLike${newComment.getAttribute("data-index")}`
-      ) !== null &&
-      localStorage.getItem(`newLike${newComment.getAttribute("data-index")}`) <=
-        localStorage.getItem(`like${newComment.getAttribute("data-index")}`) - 1
-    ) {
-      authorAndMessage
-        .querySelector(".button_minus")
-        .setAttribute("disabled", "");
-      authorAndMessage.querySelector(".button_minus").style =
-        "color: black; opacity: 0.4;";
+    if (localStorage.getItem(`newLike${newComment.getAttribute("data-index")}`) !== null && localStorage.getItem(`newLike${newComment.getAttribute("data-index")}`) <= localStorage.getItem(`like${newComment.getAttribute("data-index")}`) - 1) {
+      authorAndMessage.querySelector(".button_minus").setAttribute("disabled", "");
+      authorAndMessage.querySelector(".button_minus").style = "color: black; opacity: 0.4;";
     } else {
-      authorAndMessage
-        .querySelector(".button_minus")
-        .removeAttribute("disabled");
+      authorAndMessage.querySelector(".button_minus").removeAttribute("disabled");
       authorAndMessage.querySelector(".button_minus").removeAttribute("style");
     }
-    if (
-      localStorage.getItem(
-        `newLike${newComment.getAttribute("data-index")}`
-      ) !== null &&
-      localStorage.getItem(`newLike${newComment.getAttribute("data-index")}`) >=
-        localStorage.getItem(`like${newComment.getAttribute("data-index")}`) + 1
-    ) {
-      authorAndMessage
-        .querySelector(".button_plus")
-        .setAttribute("disabled", "");
-      authorAndMessage.querySelector(".button_plus").style =
-        "color: black; opacity: 0.4;";
+    if (localStorage.getItem(`newLike${newComment.getAttribute("data-index")}`) !== null && localStorage.getItem(`newLike${newComment.getAttribute("data-index")}`) >= localStorage.getItem(`like${newComment.getAttribute("data-index")}`) + 1) {
+      authorAndMessage.querySelector(".button_plus").setAttribute("disabled", "");
+      authorAndMessage.querySelector(".button_plus").style = "color: black; opacity: 0.4;";
     } else {
-      authorAndMessage
-        .querySelector(".button_plus")
-        .removeAttribute("disabled");
+      authorAndMessage.querySelector(".button_plus").removeAttribute("disabled");
       authorAndMessage.querySelector(".button_plus").removeAttribute("style");
     }
 
@@ -529,11 +379,7 @@ function getAnswers() {
 
   for (let i = 0; i <= messages.length; i++) {
     for (let k = 0; k <= messages.length; k++) {
-      if (
-        localStorage.getItem(`dateAnswer${i}.index${k}`) !== null &&
-        localStorage.getItem(`authorAnswer${i}.index${k}`) !== null &&
-        localStorage.getItem(`idAnswerParent${i}.index${k}`) !== null
-      ) {
+      if (localStorage.getItem(`dateAnswer${i}.index${k}`) !== null && localStorage.getItem(`authorAnswer${i}.index${k}`) !== null && localStorage.getItem(`idAnswerParent${i}.index${k}`) !== null) {
         let answer = document.createElement("div");
         answer.className = "answer";
         let authorAndMessage = document.createElement("div");
@@ -547,15 +393,11 @@ function getAnswers() {
         let timeComment = document.createElement("div");
         var nowTime = new Date();
         timeComment.className = "date_and_time";
-        timeComment.innerText = `${localStorage.getItem(
-          `dateAnswer${i}.index${k}`
-        )}`;
+        timeComment.innerText = `${localStorage.getItem(`dateAnswer${i}.index${k}`)}`;
 
         let commentText = document.createElement("div");
         commentText.className = "comment_text";
-        commentText.innerText = `${localStorage.getItem(
-          `authorAnswer${i}.index${k}`
-        )}`;
+        commentText.innerText = `${localStorage.getItem(`authorAnswer${i}.index${k}`)}`;
         let underText = document.createElement("div");
         underText.className = "under_text under_text_answer";
 
@@ -577,56 +419,28 @@ function getAnswers() {
         authorAndMessage.appendChild(avatarAuthor);
         answer.appendChild(authorAndMessage);
 
-        if (
-          localStorage.getItem(`newLikeAnswer${i}.index${k}`) !== null &&
-          localStorage.getItem(`newLikeAnswer${i}.index${k}`) <=
-            localStorage.getItem(`likeAnswer${i}.index${k}`) - 1
-        ) {
-          authorAndMessage
-            .querySelector(".button_minus")
-            .setAttribute("disabled", "");
-          authorAndMessage.querySelector(".button_minus").style =
-            "color: black; opacity: 0.4;";
+        if (localStorage.getItem(`newLikeAnswer${i}.index${k}`) !== null && localStorage.getItem(`newLikeAnswer${i}.index${k}`) <= localStorage.getItem(`likeAnswer${i}.index${k}`) - 1) {
+          authorAndMessage.querySelector(".button_minus").setAttribute("disabled", "");
+          authorAndMessage.querySelector(".button_minus").style = "color: black; opacity: 0.4;";
         } else {
-          authorAndMessage
-            .querySelector(".button_minus")
-            .removeAttribute("disabled");
-          authorAndMessage
-            .querySelector(".button_minus")
-            .removeAttribute("style");
+          authorAndMessage.querySelector(".button_minus").removeAttribute("disabled");
+          authorAndMessage.querySelector(".button_minus").removeAttribute("style");
         }
-        if (
-          localStorage.getItem(`newLikeAnswer${i}.index${k}`) !== null &&
-          localStorage.getItem(`newLikeAnswer${i}.index${k}`) >=
-            localStorage.getItem(`likeAnswer${i}.index${k}`) + 1
-        ) {
-          authorAndMessage
-            .querySelector(".button_plus")
-            .setAttribute("disabled", "");
-          authorAndMessage.querySelector(".button_plus").style =
-            "color: black; opacity: 0.4;";
+        if (localStorage.getItem(`newLikeAnswer${i}.index${k}`) !== null && localStorage.getItem(`newLikeAnswer${i}.index${k}`) >= localStorage.getItem(`likeAnswer${i}.index${k}`) + 1) {
+          authorAndMessage.querySelector(".button_plus").setAttribute("disabled", "");
+          authorAndMessage.querySelector(".button_plus").style = "color: black; opacity: 0.4;";
         } else {
-          authorAndMessage
-            .querySelector(".button_plus")
-            .removeAttribute("disabled");
-          authorAndMessage
-            .querySelector(".button_plus")
-            .removeAttribute("style");
+          authorAndMessage.querySelector(".button_plus").removeAttribute("disabled");
+          authorAndMessage.querySelector(".button_plus").removeAttribute("style");
         }
 
         if (authorAndMessage.querySelector(".number_likes").textContent < 0) {
           authorAndMessage.querySelector(".number_likes").style = "color: red";
         } else {
-          authorAndMessage
-            .querySelector(".number_likes")
-            .removeAttribute("style");
+          authorAndMessage.querySelector(".number_likes").removeAttribute("style");
         }
 
-        messages[
-          messages.length -
-            localStorage.getItem(`idAnswerParent${i}.index${k}`) -
-            1
-        ].appendChild(answer);
+        messages[messages.length - localStorage.getItem(`idAnswerParent${i}.index${k}`) - 1].appendChild(answer);
       }
     }
   }
@@ -638,43 +452,35 @@ document.addEventListener("click", (event) => {
 
   if (event.target.closest(".button_answer")) {
     messages.forEach(function (mess) {
-      //проверка есть ли блоки с отправкой ответа
+      //проверка есть ли блоки с отправкой ответа, то удалить
       if (mess.querySelector(".copy_form_answer") !== null) {
         mess.querySelector(".copy_form_answer").remove();
       }
     });
 
-    const index = event.target
-      .closest(".button_answer")
-      .getAttribute("data-index");
+    const index = event.target.closest(".button_answer").getAttribute("data-index");
+    console.log(index);
     let formSend = document.querySelector(".comment_author");
     let cloneFormSend = formSend.cloneNode(true);
     cloneFormSend.className += " copy_form_answer";
     cloneFormSend.id = "form_answer";
-    messages[messages.length - index - 1].appendChild(cloneFormSend);
-    sendAnswer(messages.length - index - 1);
+
+    document.querySelector(`.comment_people[data-index="${index}"]`).appendChild(cloneFormSend);
+    // messages[messages.length - index - 1].appendChild(cloneFormSend);
+    sendAnswer(index);
   }
 });
 
 function sendAnswer(messageAtributeIndex) {
-  document.getElementById("form_answer").style =
-    "display: grid padding-left: 91px";
+  document.getElementById("form_answer").style = "display: grid padding-left: 91px";
   document.getElementById("form_answer").style = "padding-left: 91px";
 
   let messages = document.querySelectorAll(".comment_people");
 
-  let buttonSendAnswer = document
-    .querySelector("#form_answer")
-    .querySelector(".send");
-  let textAreaAnswer = document
-    .querySelector("#form_answer")
-    .querySelector(".message");
-  let maxTextAnswer = document
-    .querySelector("#form_answer")
-    .querySelector(".max_text");
-  let warningTextAnswer = document
-    .querySelector("#form_answer")
-    .querySelector(".warning_text");
+  let buttonSendAnswer = document.querySelector("#form_answer").querySelector(".send");
+  let textAreaAnswer = document.querySelector("#form_answer").querySelector(".message");
+  let maxTextAnswer = document.querySelector("#form_answer").querySelector(".max_text");
+  let warningTextAnswer = document.querySelector("#form_answer").querySelector(".warning_text");
 
   if (localStorage.getItem("indexAuthorAnswer") !== null) {
     indexAuthorAnswer = localStorage.getItem("indexAuthorAnswer");
@@ -729,11 +535,7 @@ function sendAnswer(messageAtributeIndex) {
     let timeComment = document.createElement("div");
     var nowTime = new Date();
     timeComment.className = "date_and_time";
-    timeComment.innerText = `${padTo2Digits(nowTime.getDate())}.${padTo2Digits(
-      nowTime.getMonth() + 1
-    )} ${padTo2Digits(nowTime.getHours())}:${padTo2Digits(
-      nowTime.getMinutes()
-    )}`;
+    timeComment.innerText = `${padTo2Digits(nowTime.getDate())}.${padTo2Digits(nowTime.getMonth() + 1)} ${padTo2Digits(nowTime.getHours())}:${padTo2Digits(nowTime.getMinutes())}`;
 
     let commentText = document.createElement("div");
     commentText.className = "comment_text";
@@ -753,12 +555,10 @@ function sendAnswer(messageAtributeIndex) {
     authorAndMessage.appendChild(avatarAuthor);
     answer.appendChild(authorAndMessage);
 
-    messages[messageAtributeIndex].appendChild(answer);
+    document.querySelector(`.comment_people[data-index="${messageAtributeIndex}"]`).appendChild(answer);
+    // messages[messageAtributeIndex].appendChild(answer);
 
-    answer.setAttribute(
-      "data-index",
-      answer.closest(".comment_people").querySelectorAll(".answer").length - 1
-    );
+    answer.setAttribute("data-index", answer.closest(".comment_people").querySelectorAll(".answer").length - 1);
 
     textAreaAnswer.value = "";
     textAreaAnswer.style.height = "43.531px";
@@ -769,30 +569,10 @@ function sendAnswer(messageAtributeIndex) {
 
     document.getElementById("form_answer").remove();
 
-    localStorage.setItem(
-      `likeAnswer${answer
-        .closest(".comment_people")
-        .getAttribute("data-index")}.index${answer.getAttribute("data-index")}`,
-      likeRandom
-    );
-    localStorage.setItem(
-      `idAnswerParent${answer
-        .closest(".comment_people")
-        .getAttribute("data-index")}.index${answer.getAttribute("data-index")}`,
-      answer.closest(".comment_people").getAttribute("data-index")
-    );
-    localStorage.setItem(
-      `dateAnswer${answer
-        .closest(".comment_people")
-        .getAttribute("data-index")}.index${answer.getAttribute("data-index")}`,
-      timeComment.textContent
-    );
-    localStorage.setItem(
-      `authorAnswer${answer
-        .closest(".comment_people")
-        .getAttribute("data-index")}.index${answer.getAttribute("data-index")}`,
-      commentText.textContent
-    );
+    localStorage.setItem(`likeAnswer${answer.closest(".comment_people").getAttribute("data-index")}.index${answer.getAttribute("data-index")}`, likeRandom);
+    localStorage.setItem(`idAnswerParent${answer.closest(".comment_people").getAttribute("data-index")}.index${answer.getAttribute("data-index")}`, answer.closest(".comment_people").getAttribute("data-index"));
+    localStorage.setItem(`dateAnswer${answer.closest(".comment_people").getAttribute("data-index")}.index${answer.getAttribute("data-index")}`, timeComment.textContent);
+    localStorage.setItem(`authorAnswer${answer.closest(".comment_people").getAttribute("data-index")}.index${answer.getAttribute("data-index")}`, commentText.textContent);
     indexAuthorAnswer++;
     localStorage.setItem("indexAuthorAnswer", indexAuthorAnswer);
     plusMinusButtonsAnswer();
@@ -808,65 +588,29 @@ document.addEventListener("click", (event) => {
     let id = event.target.closest(".comment_people").getAttribute("data-index");
 
     if (event.target.closest(".answer") !== null) {
-      if (
-        buttonFavorites.hasAttribute(
-          `active-favorites${id}-${buttonFavorites
-            .closest(".answer")
-            .getAttribute("data-index")}`
-        )
-      ) {
-        localStorage.removeItem(
-          `active-favorites${id}.${buttonFavorites
-            .closest(".answer")
-            .getAttribute("data-index")}`
-        );
-        buttonFavorites.removeAttribute(
-          `active-favorites${id}-${buttonFavorites
-            .closest(".answer")
-            .getAttribute("data-index")}`
-        );
+      if (buttonFavorites.hasAttribute(`active-favorites${id}-${buttonFavorites.closest(".answer").getAttribute("data-index")}`)) {
+        localStorage.removeItem(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`);
+        buttonFavorites.removeAttribute(`active-favorites${id}-${buttonFavorites.closest(".answer").getAttribute("data-index")}`);
         buttonFavorites.style = "color: black";
-        buttonFavorites.innerHTML =
-          '<img src="images/izbran.svg" alt="izbran" /><p>В избранное</p>';
+        buttonFavorites.innerHTML = '<img src="images/izbran.svg" alt="izbran" /><p>В избранное</p>';
       } else {
         buttonFavorites.style = "color: red";
         buttonFavorites.innerHTML = "<p>В избранном</p>";
-        buttonFavorites.setAttribute(
-          `active-favorites${id}-${buttonFavorites
-            .closest(".answer")
-            .getAttribute("data-index")}`,
-          true
-        );
-        localStorage.setItem(
-          `active-favorites${id}.${buttonFavorites
-            .closest(".answer")
-            .getAttribute("data-index")}`,
-          buttonFavorites.getAttribute(
-            `active-favorites${id}-${buttonFavorites
-              .closest(".answer")
-              .getAttribute("data-index")}`
-          )
-        );
+        buttonFavorites.setAttribute(`active-favorites${id}-${buttonFavorites.closest(".answer").getAttribute("data-index")}`, true);
+        localStorage.setItem(`active-favorites${id}.${buttonFavorites.closest(".answer").getAttribute("data-index")}`, buttonFavorites.getAttribute(`active-favorites${id}-${buttonFavorites.closest(".answer").getAttribute("data-index")}`));
       }
     } else {
-      if (
-        buttonFavorites.hasAttribute(`active-favorites${id}`) &&
-        localStorage.getItem(`active-favorites${id}`) !== null
-      ) {
+      if (buttonFavorites.hasAttribute(`active-favorites${id}`) && localStorage.getItem(`active-favorites${id}`) !== null) {
         buttonFavorites.removeAttribute(`active-favorites${id}`);
         localStorage.removeItem(`active-favorites${id}`);
         buttonFavorites.style = "color: black";
-        buttonFavorites.innerHTML =
-          '<img src="images/izbran.svg" alt="izbran" /><p>В избранное</p>';
+        buttonFavorites.innerHTML = '<img src="images/izbran.svg" alt="izbran" /><p>В избранное</p>';
       } else {
         buttonFavorites.style = "color: red";
         buttonFavorites.innerHTML = "<p>В избранном</p>";
 
         buttonFavorites.setAttribute(`active-favorites${id}`, true);
-        localStorage.setItem(
-          `active-favorites${id}`,
-          buttonFavorites.getAttribute(`active-favorites${id}`)
-        );
+        localStorage.setItem(`active-favorites${id}`, buttonFavorites.getAttribute(`active-favorites${id}`));
       }
     }
   }
@@ -878,36 +622,14 @@ function getFavorites() {
   buttonFavorites.forEach(function (btn, index) {
     let id = btn.closest(".comment_people").getAttribute("data-index");
 
-    if (
-      localStorage.getItem(`active-favorites${id}`) !== null &&
-      btn.closest(".answer") === null
-    ) {
-      btn.setAttribute(
-        `active-favorites${id}`,
-        localStorage.getItem(`active-favorites${id}`)
-      );
+    if (localStorage.getItem(`active-favorites${id}`) !== null && btn.closest(".answer") === null) {
+      btn.setAttribute(`active-favorites${id}`, localStorage.getItem(`active-favorites${id}`));
       btn.style = "color: red";
       btn.innerHTML = "<p>В избранном</p>";
     }
 
-    if (
-      btn.closest(".answer") !== null &&
-      localStorage.getItem(
-        `active-favorites${id}.${btn
-          .closest(".answer")
-          .getAttribute("data-index")}`
-      ) !== null
-    ) {
-      btn.setAttribute(
-        `active-favorites${id}-${btn
-          .closest(".answer")
-          .getAttribute("data-index")}`,
-        localStorage.getItem(
-          `active-favorites${id}.${btn
-            .closest(".answer")
-            .getAttribute("data-index")}`
-        )
-      );
+    if (btn.closest(".answer") !== null && localStorage.getItem(`active-favorites${id}.${btn.closest(".answer").getAttribute("data-index")}`) !== null) {
+      btn.setAttribute(`active-favorites${id}-${btn.closest(".answer").getAttribute("data-index")}`, localStorage.getItem(`active-favorites${id}.${btn.closest(".answer").getAttribute("data-index")}`));
       btn.style = "color: red";
       btn.innerHTML = "<p>В избранном</p>";
     }
@@ -932,22 +654,14 @@ function sortFavorites() {
         let answer = mess.querySelectorAll(".answer");
         answer.forEach(function (ans) {
           let idAnswer = ans.getAttribute("data-index");
-          if (
-            mess.querySelector(`[active-favorites${id}="true"]`) === null &&
-            ans.querySelector(`[active-favorites${id}-${idAnswer}="true"]`) !==
-              null
-          ) {
+          if (mess.querySelector(`[active-favorites${id}="true"]`) === null && ans.querySelector(`[active-favorites${id}-${idAnswer}="true"]`) !== null) {
             const clone = ans.cloneNode(true);
             clone.className += " clone_answer";
-            clone.style =
-              "border-top: 3px solid black; border-bottom: 3px solid black;";
+            clone.style = "border-top: 3px solid #d9d9d9; border-bottom: 3px solid #d9d9d9;";
             mess.before(clone);
           }
 
-          if (
-            ans.querySelector(`[active-favorites${id}-${idAnswer}="true"]`) ===
-            null
-          ) {
+          if (ans.querySelector(`[active-favorites${id}-${idAnswer}="true"]`) === null) {
             ans.style = "display: none";
           }
         });
@@ -965,10 +679,7 @@ function sortFavorites() {
         let answer = mess.querySelectorAll(".answer");
         answer.forEach(function (ans) {
           let idAnswer = ans.getAttribute("data-index");
-          if (
-            ans.querySelector(`[active-favorites${id}-${idAnswer}="true"]`) ===
-            null
-          ) {
+          if (ans.querySelector(`[active-favorites${id}-${idAnswer}="true"]`) === null) {
             ans.style = "display: flex";
           }
         });
@@ -1000,43 +711,16 @@ function plusMinusButtonsAnswer() {
       });
 
       function getNumberAnswer(num) {
-        localStorage.setItem(
-          `newLikeAnswer${ans
-            .closest(".comment_people")
-            .getAttribute("data-index")}.index${ans
-            .closest(".answer")
-            .getAttribute("data-index")}`,
-          num
-        );
+        localStorage.setItem(`newLikeAnswer${ans.closest(".comment_people").getAttribute("data-index")}.index${ans.closest(".answer").getAttribute("data-index")}`, num);
         ans.querySelector(".number_likes").innerText = +num;
-        if (
-          num <=
-          +localStorage.getItem(
-            `likeAnswer${ans
-              .closest(".comment_people")
-              .getAttribute("data-index")}.index${ans
-              .closest(".answer")
-              .getAttribute("data-index")}`
-          ) -
-            1
-        ) {
+        if (num <= +localStorage.getItem(`likeAnswer${ans.closest(".comment_people").getAttribute("data-index")}.index${ans.closest(".answer").getAttribute("data-index")}`) - 1) {
           btnMinus.setAttribute("disabled", "");
           btnMinus.style = "color: black; opacity: 0.4;";
         } else {
           btnMinus.removeAttribute("disabled");
           btnMinus.removeAttribute("style");
         }
-        if (
-          num >=
-          +localStorage.getItem(
-            `likeAnswer${ans
-              .closest(".comment_people")
-              .getAttribute("data-index")}.index${ans
-              .closest(".answer")
-              .getAttribute("data-index")}`
-          ) +
-            1
-        ) {
+        if (num >= +localStorage.getItem(`likeAnswer${ans.closest(".comment_people").getAttribute("data-index")}.index${ans.closest(".answer").getAttribute("data-index")}`) + 1) {
           btnPlus.setAttribute("disabled", "");
           btnPlus.style = "color: black; opacity: 0.4;";
         } else {
@@ -1074,20 +758,14 @@ function plusMinusButtons() {
     function getNumber(num) {
       localStorage.setItem(`newLike${mess.getAttribute("data-index")}`, num);
       mess.querySelector(".number_likes").innerText = +num;
-      if (
-        num <=
-        +localStorage.getItem(`like${mess.getAttribute("data-index")}`) - 1
-      ) {
+      if (num <= +localStorage.getItem(`like${mess.getAttribute("data-index")}`) - 1) {
         btnMinus.setAttribute("disabled", "");
         btnMinus.style = "color: black; opacity: 0.4;";
       } else {
         btnMinus.removeAttribute("disabled");
         btnMinus.removeAttribute("style");
       }
-      if (
-        num >=
-        +localStorage.getItem(`like${mess.getAttribute("data-index")}`) + 1
-      ) {
+      if (num >= +localStorage.getItem(`like${mess.getAttribute("data-index")}`) + 1) {
         btnPlus.setAttribute("disabled", "");
         btnPlus.style = "color: black; opacity: 0.4;";
       } else {
